@@ -1,0 +1,6 @@
+var source = context.parameters.get("source");
+if(null == source) {
+    source = "";
+}
+visitor.setCookie("source", source, 120);
+return "login.url";

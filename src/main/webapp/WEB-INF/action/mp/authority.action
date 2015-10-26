@@ -42,7 +42,7 @@ if("wechart_authorize_userinfo" == context.parameters.get("state")) {
     }
 	j = eval("(" + result + ")");
 	if(undefined == j.openid) {
-        context.set("reason", "企鹅君返回了奇怪的资料...");
+        context.set("reason", "企鹅君返回了且奇怪的资料...");
         return "outside.html";
     }
     var user = $("User", "OpenID = '" + j.openid + "'");
