@@ -54,7 +54,11 @@ if("wechart_authorize_userinfo" == context.parameters.get("state")) {
         return null;
     }
 	var waiter = $("Waiter", null);
-	var userId = waiter.c("register", j.nickname, j.sex, j.headimgurl, j.openid);
+    var source = context.cookie.get("source");
+    if(null == source) {
+        source = "";
+    }
+	var userId = waiter.c("register", j.nickname, j.sex, j.headimgurl, j.openid, source);
 	if(0 == userId) {
         context.set("reason", "竟然注册失败了...");
         return "outside.html";

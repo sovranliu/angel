@@ -378,7 +378,7 @@ public class Bid implements Serializable {
             logger.error("Bid.interrupt(" + id + ", " + activityId + ", " + userId + ", " + amount + ", ?, ?, " + status + ", " + credit + ") failed, bidder not found");
             return -2;
         }
-        String sql = "UPDATE A_Activity SET Status = " + ActivityDetail.STATUS_VIOLATE + ", Memo = '" + reason + "' WHERE Status = " + ActivityDetail.STATUS_PAY + " AND ID = " + id;
+        String sql = "UPDATE A_Activity SET Status = " + ActivityDetail.STATUS_VIOLATE + ", Memo = '" + reason + "' WHERE Status = " + ActivityDetail.STATUS_PAY + " AND ID = " + activityId;
         int result = DB.executor().alter(sql);
         if(1 != result) {
             return -4;

@@ -62,6 +62,9 @@
                 <catch target="Bid" mode="0-1" event="AngelSpeak">
                     <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
                 </catch>
+                <catch target="Bid" mode="0-1" event="BidInterrupt">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
             </catcher>
         </User>
         <ActivityInfo primarykey="ID" class="com.slfuture.angel.wechart.object.ActivityInfo">
@@ -170,11 +173,6 @@
                     <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
                 </catch>
                 <catch target="ActivityDetail" mode="0-1" event="ActivityInterrupt">
-                    <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
-                </catch>
-                <catch target="ActivityDetail" mode="0-1" event="BidInterrupt">
-                    <condition link="and" category="prerequisite" type="EQUAL" self-field="status" value="(int)3" />
-                    <condition link="and" category="link" type="EQUAL" self-field="id" other-field="activityId" />
                     <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
                 </catch>
                 <catch target="ActivityDetail" mode="0-1" event="AngelSpeak">
