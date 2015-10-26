@@ -1,0 +1,24 @@
+#include<mp/user.action>
+
+var bidId = context.parameters.get("bid");
+if(null == bidId) {
+    return "error.html";
+}
+bidId = parseInt(bidId);
+var bid = $("Bid", "id = " + bidId);
+if(null == bid) {
+    return "error.html";
+}
+if(3 != bid.p("status") && 4 != bid.p("status")) {
+    context.set("activityId", bid.p("activityId"));
+    return "activity.url";
+}
+var conf = com.slfuture.utility.wechart.js.JSHelper.fetchConfig('http://www.angeldinner.com/mp/user/pay?bid=' + bidId);
+context.set("bidId", bidId);
+context.set("amount", (bid.p("amount") / 100));
+context.set("activityId", bid.p("activityId"));
+context.set("appId", conf.appId());
+context.set("timestamp", conf.timestamp());
+context.set("nonceString", conf.nonceString());
+context.set("signature", conf.signature());
+return "pay.html";

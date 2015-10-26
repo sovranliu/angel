@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>审核页面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <style>
+    html {
+        font-size:62.5%;
+        background-color:#efefef;
+        overflow-y: scroll;
+        width: 100%;
+        height: 100%;
+    }
+    body {
+        font: 400 14px/1.5 Arial,"Lucida Grande",Verdana,"Microsoft YaHei",hei;
+        -webkit-user-select:none;
+        -webkit-text-size-adjust:none;
+        -webkit-overflow-scrolling:touch;
+        min-width: 320px;
+        width: 100%;
+        height: 100%;
+    }
+    .amf-header{
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.6rem;
+        line-height: 45px;
+    }
+    /*发起活动*/
+    .form-activity{
+        padding: 5px 15px;
+    }
+    .form-item{
+        position: relative;
+        display: -webkit-box;
+        margin-top: -1px;
+        font-size: 1.4rem;
+        padding: 0 0 0 100px;
+        line-height: 43px;
+        border-bottom: 1px solid #efefef;
+        box-sizing: border-box;
+    }
+    .form-item.selectimg{
+        border-bottom: 0 none;
+    }
+    .form-item .hasmsg{
+        position: absolute;
+        top: 36px;
+        left: 0;
+        font-size: 1.2rem;
+        color: #0089dc;
+    }
+    .form-item .tips{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background: #fff;
+        border: #0089dc solid 1px;
+        border-radius: 12px;
+        color: #0089dc;
+        text-align: center;
+        line-height: 12px;
+    }
+    .form-item label{
+        width: 200px;
+        position: relative;
+        float: left;
+        margin-left: -100px;
+        color: #666;
+    }
+    .form-item input,.form-item select{
+        min-width: 190px;
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        border: #e5e5e5 solid 1px;
+        background: #fff;
+        font-size: 1.2rem;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .form-item textarea{
+        width: 100%;
+        height: 60px;
+        border: #efefef solid 1px;
+        resize: none;
+        vertical-align: text-top;
+        padding:5px 0 0 2px;
+        margin-bottom: 10px;
+    }
+    input[type="date"]{
+        width: 100%;
+        background: #fff;
+    }
+    .file-button:before{
+        content: '+添加图片';
+        position: absolute;
+        top:15px;
+        left: 5px;
+        color: #999;
+        font-size: 1.2rem;
+    }
+    .photos{
+        width: 69px;
+        height: 50px;
+        margin: 3px 0 0 0;
+        display: inline-block;
+    }
+    .fx-form{
+        height: auto;
+    }
+    .btn{
+        display: inline-block;
+        color: #fff;
+        background-color: #ff9a14;
+        text-align: center;
+        border-radius: 3px;
+        width: 49%;
+        height: 32px;
+        line-height: 32px;
+        border: 0;
+    }
+    </style>
+</head>
+<body>
+#if(${activity})
+<div class="amf-content" style="background:#fff">
+    <section id="start" class="form-activity"  data-act="${activity.p("id")}">
+        <div class="form-item">
+            <label>活动城市：</label>
+            <span>${activity.r("city").p("name")}</span>
+        </div>
+        <div class="form-item">
+            <label>真实姓名：</label>
+            <span>
+                #if(${activity.p("name")})
+                ${activity.p("name")}
+                #end
+            </span>
+        </div>
+        <div class="form-item">
+            <label>活动名称：</label>
+            <span>${activity.p("title")}</span>
+        </div>
+        <div class="form-item">
+            <label>活动类型：</label>
+            <span>
+                #if(1 == ${activity.p("type")})
+                女神
+                #elseif(2 == ${activity.p("type")})
+                男神
+                #elseif(3 == ${activity.p("type")})
+                名人
+                #end
+            </span>
+        </div>
+        <div class="form-item">
+            <label>活动区域：</label>
+            <span>
+                ${activity.p("region")}
+            </span>
+        </div>
+        <div class="form-item">
+            <label>活动地址：</label>
+            <span>
+                ${activity.p("address")}
+            </span>
+        </div>
+        <div class="form-item">
+            <!-- 请选择预选结束时间 -->
+            <label>竞拍截止时间：</label>
+            <span>${activity.p("prepareTime")}</span>
+        </div>
+        <div class="form-item">
+            <!-- 请选择甄选结束时间 -->
+            <label>遴选截止时间：</label>
+            <span>${activity.p("auctionTime")}</span>
+        </div>
+        <div class="form-item">
+            <!-- 请选择活动时间 -->
+            <label>活动时间：</label>
+            <span>${activity.p("startTime")}</span>
+        </div>
+        <div class="form-item">
+            <label>活动起拍价：</label>
+            <span>${activity.p("basicPrice")}</span>
+        </div>
+        <div class="form-item">
+            <label>慈善比例：</label>
+            <span>${activity.p("donate")}</span>
+        </div>
+        <div class="form-item">
+            <label>活动内容：</label>
+            <span>${activity.p("content")}</span>
+        </div>
+        <div class="form-item">
+            <label>对方真实头像：</label>
+            <span>${activity.p("needPhoto")}</span>
+        </div>
+        <div class="form-item">
+            <label>竞拍要求：</label>
+            <span>${activity.p("rules")}</span>
+        </div>
+
+        <div class="line-depart"></div>
+        <div class="form-item">
+            <label>备注信息：</label>
+            <span>${activity.p("memo")}</span>
+        </div>
+        <div class="line-depart"></div>
+
+        <div class="form-item">
+            <label>我的昵称：</label>
+            <span>${activity.p("nickName")}</span>
+        </div>
+        <div class="form-item">
+            <label>我的职业：</label>
+            <span>${activity.p("career")}</span>
+        </div>
+        <div class="form-item selectimg">
+            <label>头像：</label>
+            #foreach($photo in ${activity.p("photos")})
+            <img src="${photo}" alt="">
+            #end
+        </div>
+    <div class="form-item">
+        <label>请求附言：</label>
+        <span>${activity.p("memo")}</span>
+    </div>
+    <div class="form-item">
+        <label>驳回理由：</label>
+        <input type="text" id="reason" />
+    </div>
+        <button class="btn act"  id="refused">驳 回</button>
+        <button class="btn act"  id="confirm">确 认</button>
+
+    </section>
+</div>
+#else
+<header class="amf-header">
+    审核/没有新申请
+</header>
+#end
+<footer class="amf-footer">
+</footer>
+<script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+<script>
+    $(function() {
+        var actid = $("#start").attr('data-act');
+        $('#confirm').click(function(){
+            var reason = $('#reason').val();
+            console.log(reason);
+            $.ajax({
+                type:'get',
+                url:'/manage/op/approval?activity='+ actid + '&op=true&reason=' + reason,
+                dataType:'json',
+                success:function(){
+                    window.location.reload();
+                }
+            })
+        });
+        $('#refused').click(function(){
+            var reason = $('#reason').val();
+            console.log(reason);
+            $.ajax({
+                type:'get',
+                url:'/manage/op/approval?activity='+ actid + '&op=false&reason=' + reason,
+                dataType:'json',
+                success:function(){
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+// 解析日期时间
+function parseDateTime(string) {
+    if(null == string || '' == string) {
+        return null;
+    }
+    string = string.replace("T", " ");
+    var i = string.indexOf(":");
+    if(-1 == i) {
+        return null;
+    }
+    i = string.indexOf(i + 1);
+    if(-1 == i) {
+        string += ":00";
+    }
+    return com.slfuture.angel.wechart.utility.Utility.parseDateTime(string);
+}
+// 解析整数
+function parseInteger(string, defaultValue) {
+    if(null == string || '' == string) {
+        return defaultValue;
+    }
+    try {
+        return parseInt(string);
+    }
+    catch(e) {
+        return defaultValue;
+    }
+}

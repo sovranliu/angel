@@ -1,0 +1,19 @@
+Parser
+    boolean static parse(DataType data);
+    DataType toDataType();
+
+Connection
+	boolean connect(RemoteConf conf);
+	boolean connect(RemoteConf conf, new ICallback<Boolean, VOID>() {
+        /**
+         * 结果回调
+         *
+         * @param result 结果对象
+         */
+        @Override
+        public void onResult(Result<S, T> result) {
+
+        }
+	});
+	disconnect();
+	onBroken();

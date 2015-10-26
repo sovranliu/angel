@@ -1,0 +1,18 @@
+{
+#if(${code})
+"code":${code}
+#else
+"code":0
+#end
+#if(${msg})
+,"msg":"${msg}"
+#else
+,"msg":""
+#end
+,  "data": {
+      "appId": "${appId}",
+      "timestamp": "${timestamp}",
+      "nonceStr": "${nonceString}",
+      "signature": "${signature}"
+  }
+}

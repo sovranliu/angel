@@ -1,0 +1,3 @@
+var city = $("City", "hot = true");
+context.set("cities", cities);
+return "city.html";

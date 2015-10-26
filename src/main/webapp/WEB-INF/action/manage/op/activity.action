@@ -1,0 +1,10 @@
+#include<manage/authority.action>
+
+var activityApproval = $("ActivityApproval", null);
+if(null == activityApproval) {
+
+}
+else {
+    context.set("activity", activityApproval);
+}
+return "approval.html";

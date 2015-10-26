@@ -1,0 +1,57 @@
+#include<mp/user.action>
+var activityId = context.parameters.get("activity");
+if(null == activityId) {
+    return "error.json";
+}
+activityId = parseInt(activityId);
+var chartId = context.parameters.get("id");
+if(null == chartId) {
+    return "error.json";
+}
+chartId = parseInt(chartId);
+var message = context.parameters.get("message");
+if(null == message) {
+    return "error.json";
+}
+var activity = $("ActivityDetail", "id = " + activityId);
+if(null == activity) {
+    return "error.json";
+}
+var user = context.get("User");
+var charts = activity.c("chart", chartId, user.p("id"), message);
+if(null == charts) {
+    return "error.json";
+}
+for(var i = 0; i < charts.length; i++) {
+    var chart = charts[i];
+    chart.setContent(chart.content().replace("\"", "\\\"").replace("#", "\\#").replace("$", "\\$"));
+}
+context.set("charts", charts);
+context.set("userId", user.p("id"));
+var angel = null;
+var winner = null;
+if(user.p("id") == activity.p("angelId")) {
+    angel = user;
+    var deal = activity.r("deal");
+    if(null != deal) {
+        winner = deal.r("user");
+    }
+}
+else {
+    angel = activity.r("angel");
+    winner = user;
+}
+context.set("angelId", angel.p("id"));
+context.set("mockName", activity.p("mockName"));
+context.set("angelPhoto", angel.c("primaryPhoto"));
+if(null == winner) {
+    context.set("bidderId", 0);
+    context.set("bidderNickName", "竞拍人");
+    context.set("bidderPhoto", "/image/photo.png");
+}
+else {
+    context.set("bidderId", winner.p("id"));
+    context.set("bidderNickName", winner.p("nickName"));
+    context.set("bidderPhoto", winner.c("primaryPhoto"));
+}
+return "chart.json";

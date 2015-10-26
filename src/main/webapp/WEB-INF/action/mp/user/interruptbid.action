@@ -1,0 +1,35 @@
+#include<mp/user.action>
+#include<library/common.function>
+
+var bidId = context.parameters.get("id");
+if(null == bidId) {
+    return "error.json";
+}
+bidId = parseInteger(bidId, 0);
+var reason = context.parameters.get("reason");
+if(null == reason) {
+    reason = "";
+}
+var bid = $("Bid", "id = " + bidId);
+if(null == bid) {
+    return "error.json";
+}
+if(!context.get("userId") == bid.p("userId")) {
+    return "error.json";
+}
+var result = bid.c("interrupt", reason);
+if(0 == result) {
+    context.set("msg", "竞拍活动已取消");
+    context.set("redirect", "/mp/user/mybid");
+    return "success.json";
+}
+else if(-5 == result) {
+    context.set("msg", "微信退款失败");
+    context.set("redirect", "#");
+    return "error.json";
+}
+else {
+    context.set("msg", "竞拍活动取消失败");
+    context.set("redirect", "#");
+    return "error.json";
+}

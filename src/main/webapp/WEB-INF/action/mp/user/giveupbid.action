@@ -1,0 +1,26 @@
+#include<mp/user.action>
+#include<library/common.function>
+
+var bidId = context.parameters.get("id");
+if(null == bidId) {
+    return "error.json";
+}
+bidId = parseInteger(bidId, 0);
+var bid = $("Bid", "id = " + bidId);
+if(null == bid) {
+    return "error.json";
+}
+if(!context.get("userId") == bid.p("userId")) {
+    return "error.json";
+}
+var result = bid.c("giveup");
+if(true == result) {
+    context.set("msg", "撤销竞拍成功");
+    context.set("redirect", "#");
+    return "success.json";
+}
+else {
+    context.set("msg", "撤销竞拍失败");
+    context.set("redirect", "#");
+    return "error.json";
+}

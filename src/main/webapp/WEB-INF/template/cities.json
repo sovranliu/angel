@@ -1,0 +1,11 @@
+{
+  "code":${code},
+  "data":[
+  #foreach($city in $cities)
+    #if($velocityCount > 1)
+,
+    #end
+    {"id":${city.p("id")}, "name":"${city.p("name")}"}
+  #end
+  ]
+}

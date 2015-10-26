@@ -1,0 +1,5 @@
+#include<mp/user.action>
+var user = context.get("User");
+var activityInfoList = $$("ActivityInfo", "angelId = " + user.p("id"));
+context.set("activities", activityInfoList);
+return "myactivity.html";

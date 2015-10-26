@@ -1,0 +1,23 @@
+#include<mp/user.action>
+#include<library/common.function>
+
+var activityId = context.parameters.get("id");
+if(null == activityId) {
+    return "error.json";
+}
+activityId = parseInteger(activityId, 0);
+var activityDetail = $("ActivityDetail", "id = " + activityId);
+if(null == activityDetail) {
+    return "error.json";
+}
+var result = activityDetail.c("giveup");
+if(true == result) {
+    context.set("msg", "活动撤销成功");
+    context.set("redirect", "#");
+    return "success.json";
+}
+else {
+    context.set("msg", "活动撤销失败");
+    context.set("redirect", "#");
+    return "error.json";
+}

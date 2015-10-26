@@ -1,0 +1,25 @@
+#include<mp/user.action>
+var bidId = context.parameters.get("bid");
+if(null == bidId || "" == bidId) {
+    return "error.json";
+}
+var bid = $("Bid", "id = " + bidId);
+if(null == bid) {
+    return "error.json";
+}
+var result = bid.c("choose");
+if(0 == result) {
+    return "success.json";
+}
+else if(-1 == result) {
+    context.set("msg", "竞拍者已经撤销了竞标");
+    return "error.json";
+}
+else if(-2 == result) {
+    context.set("msg", "竞拍者已不是竞拍状态");
+    return "error.json";
+}
+else {
+    context.set("msg", "内部错误");
+    return "error.json";
+}

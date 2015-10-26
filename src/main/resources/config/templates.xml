@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <template id="TITLE-1">
+<![CDATA[
+活动申请被驳回
+]]>
+    </template>
+    <template id="DESCRIPTION-1">
+<![CDATA[
+活动名：${activityTitle}，理由：${reason}
+]]>
+    </template>
+    <template id="URL-1">
+<![CDATA[
+/mp/user/activity?id=${activityId}
+]]>
+    </template>
+
+    <template id="TITLE-2">
+<![CDATA[
+活动 ${activityTitle} 申请通过
+]]>
+    </template>
+    <template id="DESCRIPTION-2">
+<![CDATA[
+#if("${reason}" != "")
+${reason}
+#end
+]]>
+    </template>
+    <template id="URL-2">
+<![CDATA[
+/mp/user/activity?id=${activityId}
+]]>
+    </template>
+
+    <template id="TITLE-3">
+<![CDATA[
+活动有新的竞拍
+]]>
+    </template>
+    <template id="DESCRIPTION-3">
+<![CDATA[
+#set($amount100 = ${amount} / 100)
+活动名 ${activityTitle}，竞拍人：${bidderNickName}，出价：${amount100} 元
+]]>
+    </template>
+    <template id="URL-3">
+<![CDATA[
+/mp/user/activitybid?activity=${activityId}
+]]>
+    </template>
+
+    <template id="TITLE-4">
+<![CDATA[
+活动已经确立
+]]>
+    </template>
+    <template id="DESCRIPTION-4">
+<![CDATA[
+#set($amount100 = ${amount} / 100)
+活动名： ${activityTitle} ，竞拍人：${bidderNickName}，出价：${amount100} 元
+]]>
+    </template>
+    <template id="URL-4">
+<![CDATA[
+/mp/user/activity?id=${activityId}
+]]>
+    </template>
+    <template id="NOTIFY-4">
+<![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"ZN-4j5CxC2r3l_jjDFAoLqzG-VoqAqO-iTi-BJzoc_k",
+    "url":"http://www.angeldinner.com/mp/user/activity?id=${activityId}",
+    "data":{
+        "first":{
+            "value":"您发布的活动已经确立\n",
+            "color":"#000000"
+        },
+        "keyword1":{
+            "value":"${activityTitle}",
+            "color":"#1874CD"
+        },
+        "keyword2":{
+            "value":"${bidderNickName}",
+            "color":"#1874CD"
+        },
+        "keyword3":{
+            #set($amount100 = ${amount} / 100)
+            "value":"${amount100} 元",
+            "color":"#1874CD"
+        },
+        "remark":{
+            "value":"活动已经确立，先去和他/她聊一聊吧。",
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
+
+    <template id="TITLE-5">
+<![CDATA[
+竞拍人违约通知
+]]>
+    </template>
+    <template id="DESCRIPTION-5">
+<![CDATA[
+竞拍人${bidderNickName}单方面取消了“${activityTitle}”活动，点击查看详情。
+]]>
+    </template>
+    <template id="URL-5">
+<![CDATA[
+/mp/user/message?id=${messageId}
+]]>
+    </template>
+    <template id="NOTIFY-5">
+<![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"kx5tpijYaZjZM8KyNMWs1g56914G9G3vagoOmrtdtd8",
+    "url":"http://www.angeldinner.com/mp/user/message?id=${messageId}",
+    "data":{
+        "first":{
+            "value":"您已确立的活动已被取消\n",
+            "color":"#000000"
+        },
+        "keyword1":{
+            "value":"${activityTitle}",
+            "color":"#1874CD"
+        },
+        "keyword2":{
+            "value":"${startTime}",
+            "color":"#1874CD"
+        },
+        "keyword3":{
+            "value":"${reason}\n",
+            "color":"#1874CD"
+        },
+        "remark":{
+            "value":"如有疑问请联系客服",
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
+    <template id="PAGE-5">
+<![CDATA[
+<div class="msg-block">
+    <div class="msg-title">“${activityTitle}”竞拍人违约通知</div>
+    <div class="msg-time">${messageTime}</div>
+    <div class="msg-content">
+        <p>
+        竞拍人：${bidderNickName}<br />
+        #set($amount100 = ${amount} / 100)
+        竞拍价：${amount100} 元<br />
+        违约理由：${reason}<br />
+        竞拍人违约会扣除相应的信誉积分，感谢您的理解，如有疑问请联系客服。
+        </p>
+    </div>
+    <div class="msg-ps">
+        <a href="/mp/user/activity?id=${activityId}" class="orange-btn">查看活动</a>
+    </div>
+</div>
+]]>
+    </template>
+
+    <template id="TITLE-6">
+<![CDATA[
+活动已正式成交
+]]>
+    </template>
+    <template id="DESCRIPTION-6">
+<![CDATA[
+您将会收到活动“${activityTitle}”的费用转款，点击查看详情。
+]]>
+    </template>
+    <template id="URL-6">
+<![CDATA[
+/mp/user/message?id=${messageId}
+]]>
+    </template>
+    <template id="PAGE-6">
+<![CDATA[
+<div class="msg-block">
+    <div class="msg-title">活动“${activityTitle}”已正式生效</div>
+    <div class="msg-time">${messageTime}</div>
+    <div class="msg-content">
+        <p>
+        活动主持人：${mockName}<br />
+        参与人：${bidNickName}<br />
+        #set($fee100 = ${fee} / 100)
+        活动经费：${fee100} 元<br />
+#if(${angelName})
+        活动经费转账收款人姓名：${angelName}<br /><br />
+#else
+        由于您发起活动的姓名未填写，可能会导致无法收款<br /><br />
+#end
+        感谢您选择本平台，活动过程中如有疑问请联系客服。
+        </p>
+    </div>
+</div>
+]]>
+    </template>
+
+    <template id="TITLE-7">
+<![CDATA[
+活动费用转款通知
+]]>
+    </template>
+    <template id="DESCRIPTION-7">
+<![CDATA[
+#set($amount100 = ${amount} / 100)
+#set($fee100 = ${fee} / 100)
+活动 ${activityTitle} 成交，由 ${bidNickName} 支付，竞拍价为${amount100} 元，您将收到的活动费用为${fee100} 元
+]]>
+    </template>
+    <template id="URL-7">
+<![CDATA[
+/mp/user/message?id=${messageId}
+]]>
+    </template>
+    <template id="NOTIFY-7">
+<![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"8xR6Jz81QQy8KGZRLpnBxeoUWNh_jPuilotCKC6QeSA",
+    "url":"http://www.angeldinner.com/mp/user/message?id=${messageId}",
+    "data":{
+        "first":{
+            "value":"恭喜，您的活动已经成交，祝您愉快\n",
+            "color":"#000000"
+        },
+        "keyword1":{
+            #set($fee100 = ${fee} / 100)
+            "value":"${fee100} 元",
+            "color":"#1874CD"
+        },
+        "keyword2":{
+            "value":"活动开支及酬劳费用",
+            "color":"#1874CD"
+        },
+        "keyword3":{
+            "value":"${angelName}\n",
+            "color":"#1874CD"
+        },
+        "remark":{
+            "value":"费用会直接打到您的微信钱包，如有疑问请联系客服",
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
+    <template id="PAGE-7">
+<![CDATA[
+<div class="msg-block">
+    <div class="msg-title">活动费用转款通知</div>
+    <div class="msg-time">${messageTime}</div>
+    <div class="msg-content">
+        <p>
+        活动名称：${activityTitle}<br />
+        收款姓名：${angelName}<br />
+        #set($fee100 = ${fee} / 100)
+        活动费用：${fee100} 元<br />
+        您的活动费用会转到您的微信钱包，感谢您的选择，如有疑问请联系客服。
+        </p>
+    </div>
+</div>
+]]>
+    </template>
+
+
+    <template id="TITLE-8">
+<![CDATA[
+竞拍活动成功
+]]>
+    </template>
+    <template id="DESCRIPTION-8">
+<![CDATA[
+#set($amount100 = ${amount} / 100)
+“${activityTitle}”活动的${mockName}选择了您，请尽快支付竞拍金额${amount100} 元
+]]>
+    </template>
+    <template id="URL-8">
+<![CDATA[
+/mp/user/activity?id=${activityId}
+]]>
+    </template>
+    <template id="NOTIFY-8">
+<![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"udgTzGZLgHUMUITPIMYR2Kze4v-e1LzUYSdb5IUbW3E",
+    "url":"http://www.angeldinner.com/mp/user/activity?id=${activityId}",
+    "data":{
+        "first":{
+            "value":"您的竞拍申请已经被接受\n",
+            "color":"#000000"
+        },
+        "keyword1":{
+            "value":"${activityTitle} 活动",
+            "color":"#1874CD"
+        },
+        "keyword2":{
+            #set($amount100 = ${amount} / 100)
+            "value":"${amount100} 元\n",
+            "color":"#1874CD"
+        },
+        "remark":{
+            "value":"请尽快支付您的出价，如有疑问请联系客服",
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
+
+    <template id="TITLE-9">
+<![CDATA[
+活动的竞拍费用支付成功
+]]>
+    </template>
+    <template id="DESCRIPTION-9">
+<![CDATA[
+#set($amount100 = ${amount} / 100)
+活动名：${activityTitle} ，已支付的竞拍金额：${amount100} 元，详细点击进入
+]]>
+    </template>
+    <template id="URL-9">
+<![CDATA[
+/mp/user/activity?id=${activityId}
+]]>
+    </template>
+    <template id="NOTIFY-9">
+<![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"dCYgkgz5mMLWFLbQPtq5Ygo2wWyMox1N9f_fxTYWKWs",
+    "url":"http://www.angeldinner.com/mp/user/activity?id=${activityId}",
+    "data":{
+        "first":{
+            "value":"支付成功通知\n",
+            "color":"#000000"
+        },
+        "orderMoneySum":{
+            #set($amount100 = ${amount} / 100)
+            "value":"${amount100} 元",
+            "color":"#1874CD"
+        },
+        "orderProductName":{
+            "value":"${activityTitle}开支及酬劳费用\n",
+            "color":"#1874CD"
+        },
+        "Remark":{
+            "value":"如有任何问题请联系客服，谢谢",
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
+
+    <template id="TITLE-10">
+<![CDATA[
+活动竞拍费用退款通知
+]]>
+    </template>
+    <template id="DESCRIPTION-10">
+<![CDATA[
+#set($amount100 = ${amount} / 100)
+“ ${activityTitle} ”的竞拍金额：${amount100} 元全额退回，
+#if(${reason})
+退款原因：${reason}
+#else
+如有疑问请联系客服
+#end
+]]>
+    </template>
+    <template id="URL-10">
+<![CDATA[
+/mp/user/message?id=${messageId}
+]]>
+    </template>
+    <template id="NOTIFY-10">
+<![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"IsjkqjdXK9wGII21pRiIF67uw4ndQ3mhWs_vhad1gn4",
+    "url":"http://www.angeldinner.com/mp/user/message?id=${messageId}",
+    "data":{
+        "first":{
+            "value":"活动竞拍退款通知\n",
+            "color":"#000000"
+        },
+        "keyword1":{
+            "value":"线下活动",
+            "color":"#1874CD"
+        },
+        "keyword2":{
+            "value":"${activityTitle} 竞拍费用",
+            "color":"#1874CD"
+        },
+        "keyword3":{
+            #set($amount100 = ${amount} / 100)
+            "value":"${amount100} 元\n",
+            "color":"#1874CD"
+        },
+        "remark":{
+#if(${reason})
+            "value":"退款原因：${reason}",
+#else
+            "value":"如有疑问请联系客服，谢谢",
+#end
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
+    <template id="PAGE-10">
+        <![CDATA[
+<div class="msg-block">
+    <div class="msg-title">活动竞拍费用退款通知</div>
+    <div class="msg-time">${messageTime}</div>
+    <div class="msg-content">
+        <p>
+        活动名称：${activityTitle}<br />
+        #set($amount100 = ${amount} / 100)
+        您的出价：${amount100} 元<br />
+        退回金额：${amount100} 元<br /><br />
+        您的竞拍费用会退还到微信钱包，感谢您的理解，如有疑问请联系客服。
+        </p>
+    </div>
+</div>
+]]>
+    </template>
+
+    <template id="TITLE-11">
+<![CDATA[
+活动主违约通知
+]]>
+    </template>
+    <template id="DESCRIPTION-11">
+<![CDATA[
+“${activityTitle}”发起人${mockName}单方面取消了活动，点击查看详情。
+]]>
+    </template>
+    <template id="URL-11">
+<![CDATA[
+/mp/user/message?id=${messageId}
+]]>
+    </template>
+    <template id="NOTIFY-11">
+<![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"kx5tpijYaZjZM8KyNMWs1g56914G9G3vagoOmrtdtd8",
+    "url":"http://www.angeldinner.com/mp/user/message?id=${messageId}",
+    "data":{
+        "first":{
+            "value":"“${activityTitle}”活动主违约通知\n",
+            "color":"#000000"
+        },
+        "keyword1":{
+            "value":"${activityTitle}",
+            "color":"#1874CD"
+        },
+        "keyword2":{
+            "value":"${startTime}",
+            "color":"#1874CD"
+        },
+        "keyword3":{
+            "value":"${reason}\n",
+            "color":"#1874CD"
+        },
+        "remark":{
+            "value":"活动已经失效，点击查看详情。",
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
+    <template id="PAGE-11">
+<![CDATA[
+<div class="msg-block">
+    <div class="msg-title">“${activityTitle}”活动主违约通知</div>
+    <div class="msg-time">${messageTime}</div>
+    <div class="msg-content">
+        <p>
+        活动主：${mockName}<br />
+        #set($amount100 = ${amount} / 100)
+        您的出价：${amount100} 元<br />
+        违约理由：${reason}<br /><br />
+        活动主违约会扣除相应的信誉积分，您的出价会退还到微信钱包，感谢您的理解，如有疑问请联系客服。
+        </p>
+    </div>
+    <div class="msg-ps">
+        <a href="/mp/user/activity?id=${activityId}" class="orange-btn">查看活动</a>
+    </div>
+</div>
+]]>
+    </template>
+
+    <template id="TITLE-12">
+<![CDATA[
+您拍下的活动已正式生效
+]]>
+    </template>
+    <template id="DESCRIPTION-12">
+<![CDATA[
+#set($amount100 = ${amount} / 100)
+活动名：“${activityTitle}”，本次您支付了${amount100} 元的费用，点击查看详情。
+]]>
+    </template>
+    <template id="URL-12">
+<![CDATA[
+/mp/user/message?id=${messageId}
+]]>
+    </template>
+    <template id="PAGE-12">
+<![CDATA[
+<div class="msg-block">
+    <div class="msg-title">活动“${activityTitle}”已正式生效</div>
+    <div class="msg-time">${messageTime}</div>
+    <div class="msg-content">
+        <p>
+        活动主：${mockName}<br />
+        参与人：${bidNickName}<br />
+        活动内容：${content}<br />
+        #set($amount100 = ${amount} / 100)
+        您的支出：${amount100} 元<br /><br />
+        感谢您选择本平台。快乐生活，恰逢对面有趣人。
+        </p>
+    </div>
+</div>
+]]>
+    </template>
+
+    <template id="TITLE-13">
+<![CDATA[
+有新的聊天消息
+]]>
+    </template>
+    <template id="DESCRIPTION-13">
+<![CDATA[
+“${activityTitle}”中有未读的聊天消息
+]]>
+    </template>
+    <template id="URL-13">
+<![CDATA[
+/mp/user/chart?activity=${activityId}
+]]>
+    </template>
+</templates>

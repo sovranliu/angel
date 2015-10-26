@@ -1,0 +1,4 @@
+// 微信回调通知
+var data = context.parameters.get("");
+com.slfuture.angel.wechart.utility.Pay.onPay(data);
+return "pay.xml";

@@ -1,0 +1,22 @@
+#include<manage/authority.action>
+
+var activityId = context.parameters.get("activity");
+if(null == activityId) {
+    return "404.code";
+}
+var approval = context.parameters.get("op");
+if(null == approval) {
+    return "404.code";
+}
+var reason = context.parameters.get("reason");
+if(null == reason) {
+    return "";
+}
+var activity = $("ActivityDetail", "id = " + activityId);
+if("true" == approval) {
+    activity.c("approval", true, reason);
+}
+else {
+    activity.c("approval", false, reason);
+}
+return "success.json";

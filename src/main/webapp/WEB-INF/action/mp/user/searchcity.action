@@ -1,0 +1,11 @@
+var keyword = context.parameters.get("keyword");
+var cities;
+if(null == keyword || '' == keyword) {
+    cities = $$("City", "hot = true");
+}
+else {
+    cities = $$("City", "keyword = (string)" + keyword);
+}
+context.set("code", 0);
+context.set("cities", cities);
+return "cities.json";

@@ -1,0 +1,4 @@
+#include<mp/user.action>
+var user = context.get("User");
+context.set("user", user);
+return "organize.html";

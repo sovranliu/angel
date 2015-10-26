@@ -1,0 +1,68 @@
+#include<mp/user.action>
+#include<library/common.function>
+
+var activityId = parseInteger(context.parameters.get("activity"), 0);
+if(0 == activityId) {
+    return "error.html";
+}
+context.set("activity", activityId);
+var order = parseInteger(context.parameters.get("order"), 1);
+var user = context.get("User");
+var bids = $$("Bid", "activityId = " + activityId + " && order = " + order);
+var result = new com.slfuture.carrie.base.type.RecordSet();
+for(var i = 0; i < bids.length; i++) {
+    var bid = bids[i];
+    var bidder = bid.r("user")
+    var record = new com.slfuture.carrie.base.type.Record();
+    record.put("bidId", bid.p("id"));
+    record.put("photo", bid.p("photo"));
+    record.put("nickName", bidder.p("nickName"));
+    if(1 == bid.p("status")) {
+        record.put("status", "竞拍中");
+        record.put("sign", "orange");
+    }
+    else if(2 == bid.p("status")) {
+        record.put("status", "已放弃");
+        record.put("sign", "deepgrey");
+    }
+    else if(3 == bid.p("status")) {
+        record.put("status", "等待回应");
+        record.put("sign", "orange");
+    }
+    else if(4 == bid.p("status")) {
+        record.put("status", "正在回应");
+        record.put("sign", "orange");
+    }
+    else if(5 == bid.p("status")) {
+        record.put("status", "放弃资格");
+        record.put("sign", "deepgrey");
+    }
+    else if(6 == bid.p("status")) {
+        record.put("status", "已支付");
+        record.put("sign", "green");
+    }
+    else if(7 == bid.p("status")) {
+        record.put("status", "违约");
+        record.put("sign", "deepgrey");
+    }
+    else {
+        record.put("status", "");
+    }
+    record.put("credit", com.slfuture.angel.wechart.utility.Credit.getLevel(bidder.p("credit")));
+    if(null == bid.p("expireTime")) {
+        record.put("expireTime", "无");
+    }
+    else {
+        record.put("expireTime", bid.p("expireTime").toString("MM-dd HH:mm"));
+    }
+    record.put("amount", (bid.p("amount") / 100));
+    if(true == bidder.c("isBlacked", (user.p("id")))) {
+        record.put("black", true);
+    }
+    else {
+        record.put("black", false);
+    }
+    result.add(record);
+}
+context.set("bidInfos", result);
+return "activitybid.html";

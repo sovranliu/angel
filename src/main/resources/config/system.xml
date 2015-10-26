@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system>
+    <upload>
+        <directory>/app/data/upload/</directory>
+        <size>10240000</size>
+    </upload>
+</system>

@@ -1,0 +1,37 @@
+#include<mp/user.action>
+
+var bidId = context.parameters.get("bid");
+if(null == bidId) {
+    context.set("code", -4);
+    return "error.json";
+}
+bidId = parseInt(bidId);
+var bid = $("Bid", "id = " + bidId);
+if(null == bid) {
+    context.set("code", -1);
+    return "error.json";
+}
+if(0 != bid.c("canPay")) {
+    context.set("code", -2);
+    context.set("msg", "活动已下线或抢险支付");
+    return "error.json";
+}
+var result = bid.c("order", visitor.ip);
+if(null == result) {
+    context.set("code", -3);
+    context.set("msg", "内部错误");
+    return "error.json";
+}
+if(0 == result.code()) {
+    context.set("code", 0);
+    context.set("result", result);
+}
+else if(-1 == result.code()) {
+    context.set("code", -1);
+    context.set("msg", "请勿重复支付");
+}
+else if(-2 == result.code()) {
+    context.set("code", -2);
+    context.set("msg", "本次支付订单已经失效");
+}
+return "order.json";

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<logic>
+    <domain>www.angeldinner.com</domain>
+    <db name="angel" />
+</logic>

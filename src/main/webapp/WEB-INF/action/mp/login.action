@@ -1,0 +1,6 @@
+#include<mp/user.action>
+
+if("true" == context.get("newUser")) {
+    return "load.html";
+}
+return "stage.url";

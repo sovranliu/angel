@@ -1,0 +1,83 @@
+#include<mp/user.action>
+var userId = context.get("User").p("id");
+var bids = context.get("User").r("bids");
+var result1 = new com.slfuture.carrie.base.type.RecordSet();
+var result2 = new com.slfuture.carrie.base.type.RecordSet();
+var result3 = new com.slfuture.carrie.base.type.RecordSet();
+for(var i = 0; i < bids.length; i++) {
+    var bid = bids[i];
+    var activity = bid.r("activity");
+    var record = new com.slfuture.carrie.base.type.Record();
+    record.put("activityId", activity.p("id"));
+    record.put("title", activity.p("title"));
+    record.put("angelPhoto", activity.c("primaryPhoto"));
+    record.put("startTime", activity.p("startTime"));
+    record.put("amount", bid.p("amount"));
+    record.put("myPhoto", bid.p("photo"));
+    var expireTime = bid.p("expireTime");
+    if(null == expireTime) {
+        // record.put("expireTime", null);
+    }
+    else {
+        record.put("expireTime", bid.p("expireTime").toString("MM-dd HH:mm"));
+    }
+    //
+    if(1 == bid.p("status")) {
+        if(4 == activity.p("status")) {
+            var expireTime = bid.p("expireTime");
+            if(activity.p("auctionTime").compareTo(com.slfuture.carrie.base.time.DateTime.now()) > 0 && (null == expireTime || expireTime.compareTo(com.slfuture.carrie.base.time.DateTime.now()) > 0)) {
+                record.put("status", "竞拍中");
+                result2.add(record);
+            }
+            else {
+                record.put("status", "未举办");
+                result3.add(record);
+            }
+        }
+        else {
+            record.put("status", "未接纳");
+            result3.add(record);
+        }
+    }
+    else if(2 == bid.p("status")) {
+        record.put("status", "已撤销");
+        result3.add(record);
+    }
+    else if(3 == bid.p("status") || 4 == bid.p("status")) {
+        if(4 == activity.p("status")) {
+            record.put("status", "待支付");
+            result2.add(record);
+        }
+        else {
+            record.put("status", "未成功");
+            result3.add(record);
+        }
+    }
+    else if(5 == bid.p("status")) {
+        record.put("status", "已取消");
+        result3.add(record);
+    }
+    else if(6 == bid.p("status")) {
+        if(bid.p("id") == activity.p("bidId")) {
+            if(9 == activity.p("status")) {
+                record.put("status", "已成交");
+            }
+            else {
+                record.put("status", "已支付");
+            }
+            result1.add(record);
+        }
+        else {
+            record.put("status", "已退款");
+            result3.add(record);
+        }
+    }
+    else if(7 == bid.p("status")) {
+        record.put("status", "已违约");
+        result3.add(record);
+    }
+}
+context.set("bids1", result1);
+context.set("bids2", result2);
+context.set("bids3", result3);
+return "mybid.html";

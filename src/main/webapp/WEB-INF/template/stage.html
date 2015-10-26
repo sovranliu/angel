@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>女神的晚餐</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<header class="amf-header">
+    <a href="city" class="city">${cityName}</a>
+    <span id="selectMenu" class="selectmenu down">
+#if($type == 2)
+男 神
+#elseif($type == 3)
+名 人
+#else
+女 神
+#end
+    </span>
+    <ul class="list">
+#if($type == 2)
+        <li><a href="stage?type=1">女 神</a></li>
+        <li><a href="stage?type=3">名 人</a></li>
+#elseif($type == 3)
+        <li><a href="stage?type=1">女 神</a></li>
+        <li><a href="stage?type=2">男 神</a></li>
+#else
+        <li><a href="stage?type=2">男 神</a></li>
+        <li><a href="stage?type=3">名 人</a></li>
+#end
+    </ul>
+    <a href="javascript:;" id="mine" class="mine">
+        <i class="msg-dot"></i>
+    </a>
+    <ul class="minelist">
+        <li id="mymsg"><i></i><a href="/mp/user/mymessage">我的消息</a></li>
+        <li><i></i><a href="/mp/user/myactivity">我的活动</a></li>
+        <li><i></i><a href="/mp/user/mybid">我的竞拍</a></li>
+        <li id="scanQRCode1"><i></i>扫一扫</li>
+    </ul>
+</header>
+<div id="slider" class="swipe adver">
+    <div class="swipe-wrap">
+        #foreach($ad in $ads)
+        <div class="ad-wrap">
+            <a href="${ad.p("link")}">
+            <img src="${ad.p("image")}" alt="${ad.p("id")}">
+            </a>
+        </div>
+        #end
+    </div>
+    <nav>
+        <ul id="position" class="ad-position position">
+            <li class="on"></li>
+            <li class=""></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="amf-content">
+    #foreach($activity in $activities)
+    <a href="activity?id=${activity.id()}" class="amf-list">
+        <h4>${activity.title()}</h4>
+        <img src="#" class="act-img" data-src="${activity.primaryPhoto()}" alt="">
+        <p>${activity.content()}</p>
+        <div class="amf-info">
+            <div class="amf-block">
+                <p>剩余时间</p>
+                <p>${activity.remainDays()}天</p>
+            </div>
+            <div class="amf-block">
+                <p>活动地点</p>
+                <p>
+                    #if("$!activity.region()" == "")
+中标可见
+                    #else
+                        #if(${activity.region().length()} > 5)
+${activity.region().substring(0, 4)}..
+                        #else
+${activity.region()}
+                        #end
+                    #end
+                </p>
+            </div>
+            <div class="amf-block">
+                <p>职业</p>
+                <p>
+#if("$!activity.career()" == "")
+不告诉你
+#else
+    #if(${activity.region().length()} > 5)
+${activity.career().substring(0, 4)}..
+    #else
+${activity.career()}
+    #end
+#end
+                </p>
+            </div>
+            <div class="amf-block">
+                <div class="circle-progress">
+                    <div class="circle-inner-left">
+                        <div class="circle-left" style="transform: rotate(-225deg);">
+                        </div>
+                    </div>
+                    <div class="circle-inner-right">
+                        <div class="circle-right" style="transform: rotate(315deg);"></div>
+                    </div>
+                        <span class="circle-progress-text">
+                            <label>${activity.popularity()}</label>竞拍
+                        </span>
+                </div>
+            </div>
+        </div>
+    </a>
+    <div class="line-depart"></div>
+    #end
+</div>
+<footer class="amf-footer">
+</footer>
+<div class="bg-wrap"></div>
+<div class="bg-mast"></div>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/jquery.cookie.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+            "circle":true,
+            "isCookie":true,
+            isMsg:true
+        });
+        new angel.LazyLoadImg({});
+        new angel.WXconfig({
+            "appId":'${appId}',
+            "timestamp":'${timestamp}',
+            "nonceStr":'${nonceString}',
+            "signature":'${signature}'
+        });
+    })
+</script>
+</body>
+</html>

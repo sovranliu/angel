@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aliyun>
+	<ocs>
+		<host>434861e1f01145bf.m.cnhzaliqshpub001.ocs.aliyuncs.com:11211</host>
+		<user name="434861e1f01145bf" password="Angel123456" />
+	</ocs>
+	<oss>
+		<ACCESS_ID>k0ZrcHghuCAUZIQp</ACCESS_ID>
+		<ACCESS_KEY>WWWmZXNhGgPADF9l0aPSIbhc7RNE2L</ACCESS_KEY>
+		<bucket>slfuture-angel</bucket>
+		<domain>http://image.angeldinner.com</domain>
+	</oss>
+</aliyun>

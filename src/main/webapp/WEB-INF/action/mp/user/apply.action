@@ -1,0 +1,44 @@
+#include<mp/user.action>
+var activityId = context.parameters.get("activity");
+if(null == activityId || "" == activityId) {
+    return "error.html";
+}
+activityId = parseInt(activityId);
+var activity = $("ActivityDetail", "id = " + activityId);
+if(null == activity) {
+    return "error.html";
+}
+var user = context.get("User");
+context.set("user", user);
+var bids = user.r("bids");
+var bid = null;
+for(var i = 0; i < bids.length; i++) {
+    bid = bids[i];
+    if(activityId == bid.p("activityId")) {
+        break;
+    }
+    bid = null;
+}
+context.set("title", activity.p("title"));
+context.set("region", activity.p("region"));
+context.set("startTime", activity.p("startTime").toString("MM-dd HH:mm"));
+context.set("basicPrice", activity.p("basicPrice"));
+context.set("needPhoto", activity.p("needPhoto"));
+context.set("donate", activity.p("donate"));
+context.set("currentPrice", activity.c("getCurrentPrice"));
+if(null == bid) {
+    context.set("amount", activity.p("basicPrice"));
+    context.set("expireTime", "");
+    context.set("photo", "");
+}
+else {
+    context.set("amount", bid.p("amount"));
+    if(null == bid.p("expireTime")) {
+        context.set("expireTime", "");
+    }
+    else {
+        context.set("expireTime", bid.p("expireTime").toString("yyyy-MM-dd HH:mm").replace(" ", "T"));
+    }
+    context.set("photo", bid.p("photo"));
+}
+return "apply.html";

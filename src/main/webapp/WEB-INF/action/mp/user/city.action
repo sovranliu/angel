@@ -1,0 +1,4 @@
+// #include<authority.action>
+var cities = $$("City", "hot = true");
+context.set("cities", cities);
+return "city.html";

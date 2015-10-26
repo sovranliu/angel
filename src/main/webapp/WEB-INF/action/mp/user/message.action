@@ -1,0 +1,14 @@
+#include<mp/user.action>
+
+var userId = context.get("userId");
+var messageId = context.parameters.get("id");
+if(null == messageId) {
+    return "error.html";
+}
+messageId = parseInt(messageId);
+var message = $("Message", "id = " + messageId);
+if(message.p("userId") != userId) {
+    return "error.html";
+}
+context.set("page", message.c("getPage"));
+return "message.html";

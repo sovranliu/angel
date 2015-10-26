@@ -1,0 +1,28 @@
+#include<mp/user.action>
+
+var activityId = context.parameters.get("activity");
+if(null == activityId) {
+    context.set("title", "扫码失败");
+    return "deal.html";
+}
+var activityDetail = $("ActivityDetail", "id = " + activityId);
+if(null == activityDetail) {
+    context.set("title", "扫码失败");
+    return "deal.html";
+}
+context.set("activityTitle", activityDetail.p("title"));
+context.set("mockName", activityDetail.p("mockName"));
+var user = context.get("User");
+if(null == user) {
+    context.set("title", "扫码失败");
+    return "deal.html";
+}
+context.set("bidderNickName", user.p("nickName"));
+var result = activityDetail.c("deal", user.p("id"));
+if(true == result) {
+    context.set("title", "扫码确认成功");
+}
+else {
+    context.set("title", "扫码失败");
+}
+return "deal.html";

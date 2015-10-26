@@ -1,0 +1,23 @@
+#include<mp/user.action>
+
+var user = context.get("User");
+var bidId = context.parameters.get("bid");
+if(null == bidId || "" == bidId) {
+    return "error.json";
+}
+var bid = $("Bid", "id = " + bidId);
+if(null == bid) {
+    return "error.json";
+}
+var bidderId = bid.p("userId");
+var bidder = $("User", "id = " + bidderId);
+if(null == bidder) {
+    return "error.json";
+}
+if("true" == context.parameters.get("op")) {
+    bidder.c("black", user.p("id"), true);
+}
+else {
+    bidder.c("black", user.p("id"), false);
+}
+return "success.json";

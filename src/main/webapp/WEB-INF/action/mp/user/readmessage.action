@@ -1,0 +1,18 @@
+#include<mp/user.action>
+var message = $("Message", "id = " + context.parameters.get("id"));
+if(null == message) {
+    context.set("code", -1);
+    context.set("msg", "message not found");
+}
+else {
+    var result = message.c("read");
+    if(true == result) {
+        context.set("code", 0);
+        context.set("msg", "");
+    }
+    else {
+        context.set("code", -2);
+        context.set("msg", "read fail");
+    }
+}
+return "error.json";

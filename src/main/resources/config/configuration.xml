@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="" uri="./program.xml" />
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="/system" uri="./system.xml" />
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="/world" uri="./world.xml" />
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="/srv/db" uri="./db.xml" />
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="/srv/aliyun" uri="./aliyun.xml" />
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="/logic" uri="./logic.xml" />
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="/logic/wechart" uri="./wechart.xml" />
+    <root class="com.slfuture.carrie.utility.config.xml.RootConfig" path="/logic/templates" uri="./templates.xml" />
+</configuration>

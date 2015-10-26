@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>发起活动</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <link rel="stylesheet" rev="stylesheet" href="/css/upload.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<header class="amf-header">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <span>发起活动</span>
+</header>
+<div class="amf-content">
+    <section id="start" class="form-activity">
+        <div class="form-item">
+            <label>活动城市：</label>
+            <div id="actcity" class="actcity" data-code=""></div>
+        </div>
+        <div class="form-item">
+            <label>活动类型：</label>
+            <select name="" id="acttype">
+                <option value="1">女神的活动</option>
+                <option value="2">男神的活动</option>
+                <option value="3">名人的活动</option>
+            </select>
+        </div>
+        <div class="form-item">
+            <label>活动名称：</label>
+            <input id="actname" type="text" placeholder="给你的活动起个名字吧">
+        </div>
+        <div class="form-item">
+            <label>活动区域：</label>
+            <input id="actarea" type="text" placeholder="活动大致区域">
+        </div>
+
+        <div class="form-item" style="height:60px">
+            <!-- 请选择预选结束时间 -->
+            <label>竞拍截止时间：</label>
+            <input id="acttime1" type="datetime-local" value="" placeholder="请选择竞拍结束时间">
+            <span class="hasmsg"><i class="tips">i</i> 此日期后将无法进行竞拍</span>
+        </div>
+        <div class="form-item" style="height:60px">
+            <!-- 请选择甄选结束时间 -->
+            <label>遴选截止时间：</label>
+            <input  id="acttime2" type="datetime-local" value="" placeholder="请选择遴选截止时间">
+            <span class="hasmsg"><i class="tips">i</i> 公布最终竞拍成功者的时间</span>
+        </div>
+        <div class="form-item" style="height:60px">
+            <!-- 请选择活动时间 -->
+            <label>活动时间：</label>
+            <input id="actdate" type="datetime-local" value="" placeholder="请选择活动时间">
+            <span class="hasmsg"><i class="tips">i</i> 本次进行活动的时间</span>
+        </div>
+        <div class="form-item">
+            <label>活动起拍价：</label>
+            <input  id="actmoney" class="dmoney" type="text" placeholder="金额不得小于1元">
+        </div>
+        <div class="form-item"  style="height:60px">
+            <label>慈善比例：</label>
+            <select name="" id="cishan">
+                <option value="0">0%</option>
+                <option value="1">1%</option>
+                <option value="2">5%</option>
+                <option value="3">10%</option>
+                <option value="4">20%</option>
+                <option value="5">50%</option>
+                <option value="6">100%</option>
+            </select>
+            <span class="hasmsg"><i class="tips">i</i> 本次活动所得将按百分比捐给慈善机构</span>
+        </div>
+        <div class="form-item">
+            <label>活动内容：</label>
+            <textarea name="" id="huodong"></textarea>
+        </div>
+        <div class="form-item">
+            <label>竞拍要求：</label>
+            <textarea name="" id="requirement"></textarea>
+        </div>
+        <div class="form-item">
+            <label>需要照片：</label>
+            <select name="" id="actneed">
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+        <div class="line-depart"></div>
+        <div class="form-item">
+            <label>活动地址：</label>
+            <input id="actaddress" type="text" placeholder="活动详细地址，如：江桥万达电影院">
+        </div>
+        <div class="form-item">
+            <label>备注信息：</label>
+            <textarea name="" id="beizhu"></textarea>
+        </div>
+        <div class="line-depart"></div>
+
+        <div class="form-item">
+            <label>我的昵称：</label>
+            <input id="nickname" type="text" placeholder="请输入您的昵称" value="${user.p("nickName")}" />
+        </div>
+        <div class="form-item">
+            <label>我的职业：</label>
+            <input id="career" type="text" placeholder="请输入您的职业" value="${user.p("career")}" />
+        </div>
+        <div class="form-item selectimg" style="height:92px;">
+            <label>选择图片：</label>
+            <form class="fx-form">
+                <div class="up-img-box" id="up-img-box">
+                    <div class="file-button">
+                        <input type="file" class="opacity0" id="multi-upload" accept="image/jpeg"/>
+                    </div>
+                </div>
+                <div class="msg msg-hide" id="error-message"><i class="fx-icon-result icon-fail"></i><span>错误提示</span></div>
+            </form>
+        </div>
+        <div class="form-item" style="padding-left:0">
+            #foreach($photo in ${user.c("photoList")})
+            <img class="photos" src="" data-src="$photo" data-index="$velocityCount">
+            #end
+        </div>
+        <div class="form-item">
+            <button class="btn act"  id="act-submit">确 认</button>
+        </div>
+    </section>
+</div>
+<footer class="amf-footer">
+</footer>
+<div class="view cui-layer">
+    <div class="cui-pop-box">
+        <div class="cui-hd">
+            <div class="cui-text-center">信息确认</div>
+            <div class="lab-close-area js_close"><span class="cui-top-close">×</span>
+            </div>
+        </div>
+        <div class="cui-bd cui-roller-bd">
+            <ul class="cui-select-view">
+                <li>
+                    <label>活动时间：</label><span id="act-date"></span>
+                </li>
+                <li>
+                    <label>起拍价：</label><span id="act-money"></span>
+                </li>
+                <li>
+                    <label>慈善比例：</label><span id="act-cishan"></span>
+                </li>
+            </ul>
+            <a href="#" id="confirm-submit" class="confirm-btn">确定</a>
+        </div>
+    </div>
+</div>
+<div class="bg-mast"></div>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/uploadImagesSrc/FullMin.js"></script>
+<script src="/js/uploadImagesSrc/compress.upload.images.js"></script>
+<script src="/js/upload.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+            "getCity":true
+        });
+        new angel.LazyLoadImg({});
+        new uploadImg.UploadPage({
+            "uploadUrl":'/mp/user/upload'
+        });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+#include<mp/user.action>
+
+context.set("userId", context.get("userId"));
+var activityId = parseInt(context.parameters.get("id"));
+if(null == activityId) {
+    return "/mp/user/stage.action";
+}
+activityId = parseInt(activityId);
+var activity = $("ActivityDetail", "id = " + activityId);
+if(null == activity) {
+    return "/mp/user/stage.action";
+}
+if(activity.p("angelId") == context.get("userId")) {
+    context.set("isAngel", true);
+}
+else {
+    context.set("isAngel", false);
+    if(activity.p("status") < 4) {
+        return "/mp/user/stage.action";
+    }
+}
+context.set("activityId", activityId);
+context.set("activity", activity);
+context.set("credit", com.slfuture.angel.wechart.utility.Credit.getLevel(activity.r("angel").p("credit")));
+context.set("activityStatus", activity.p("status"));
+var bidInfo = activity.c("fetchBidder", context.get("userId"));
+context.set("isWinner", false);
+if(null == bidInfo) {
+    context.set("bidStatus", 0);
+    var bid = activity.r("deal");
+    if(null != bid) {
+        var bidder = bid.r("user");
+        context.set("bidderNickName", bidder.p("nickName"));
+        context.set("bidderPhoto", bidder.c("primaryPhoto"));
+        context.set("bidderAmount", (bid.p("amount") / 100));
+    }
+}
+else {
+    context.set("bidId", bidInfo.id());
+    context.set("bidderNickName", bidInfo.nickName());
+    context.set("bidderPhoto", bidInfo.photo());
+    context.set("bidderAmount", (bidInfo.amount() / 100));
+    if(bidInfo.id() == activity.p("bidId")) {
+        context.set("isWinner", true);
+    }
+    context.set("bidStatus", bidInfo.status());
+}
+return "activity.html";

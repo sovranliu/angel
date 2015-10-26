@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>参与竞拍</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <link rel="stylesheet" rev="stylesheet" href="/css/upload.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body data-page="JPpage">
+<header class="amf-header">
+    <a href="javascript:;" class="back">返回</a>
+    <span>参与竞拍</span>
+</header>
+<div class="amf-content">
+    <p class="confirm">请确认活动信息：</p>
+    <ul class="active-block">
+        <li><label>活动名称：</label>${title}</li>
+        <li><label>活动区域：</label>${region}</li>
+        <li><label>活动时间：</label>${startTime}</li>
+        <li><label>活动底价：</label>${basicPrice} 元</li>
+        <li><label>当前竞价：</label><em>${currentPrice}</em> 元</li>
+    </ul>
+    <p class="confirm">请您提供您的竞拍信息：</p>
+    <section id="start" class="form-activity">
+        <div class="form-item">
+            <label>竞拍价格：</label>
+            <input type="text" id="jpmoney" placeholder="请输入您的活动金额" value="${amount}" />
+        </div>
+        <div class="form-item" style="height:60px">
+            <label>截止时间：</label>
+            <input id="jptime" type="datetime-local" value="${expireTime}" />
+            <span class="hasmsg"><i class="tips">i</i> 请选择申请有效期,超过该时间视为自动放弃申请</span>
+        </div>
+        <div class="form-item selectimg" style="height:92px;">
+            <label>选择图片：</label>
+            <form class="fx-form">
+                <div class="up-img-box" id="up-img-box">
+                    #if("$!photo" != "")
+                    <div class="up-img" data-url="${photo}" data-index="0">
+                        <i class="delete">x</i>
+                        <img src="${photo}" />
+                    </div>
+                    #end
+                    <div class="file-button">
+                        <input type="file" class="opacity0" id="multi-upload" accept="image/jpeg"/>
+                    </div>
+                </div>
+                <div class="msg msg-hide" id="error-message"><i class="fx-icon-result icon-fail"></i><span>错误提示</span></div>
+            </form>
+        </div>
+        <div class="form-item" style="padding-left:0">
+            #foreach($photo in ${user.c("photoList")})
+            <img class="photos" src="" data-src="$photo" data-index="$velocityCount">
+            #end
+        </div>
+        <button class="btn act" id="act-submit">确 认</button>
+    </section>
+</div>
+<footer class="amf-footer">
+</footer>
+<div class="view cui-layer">
+    <div class="cui-pop-box">
+        <div class="cui-hd">
+            <div class="cui-text-center">信息确认</div>
+            <div class="lab-close-area js_close"><span class="cui-top-close">×</span>
+            </div>
+        </div>
+        <div class="cui-bd cui-roller-bd">
+            <ul class="cui-select-view">
+                <li>
+                    <label>我的出价：</label><span id="act-money"></span>
+                </li>
+                <li>
+                    <label>截止时间：</label><span id="act-date"></span>
+                </li>
+            </ul>
+            <a id="confirm-submit-2" class="confirm-btn">确定</a>
+        </div>
+    </div>
+</div>
+<div class="bg-mast"></div>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/uploadImagesSrc/FullMin.js"></script>
+<script src="/js/uploadImagesSrc/compress.upload.images.js"></script>
+<script src="/js/upload.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+            "isPhoto":true
+        });
+        new angel.LazyLoadImg({});
+        new uploadImg.UploadPage({
+            "uploadUrl":'/mp/user/upload'
+        });
+    })
+</script>
+</body>
+</html>

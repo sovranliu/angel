@@ -1,0 +1,74 @@
+// 验证用户是否是微信用户
+if(null != context.cookie.get("openid")) {
+    var userId = com.slfuture.angel.wechart.utility.Cache.get("OpenIDUserID", context.cookie.get("openid"));
+    if(userId > 0) {
+        context.put("userId", userId);
+        return null;
+    }
+    var user = $("User", "openId = '" + context.cookie.get("openid") + "'");
+    if(null == user) {
+        visitor.setCookie("openid", null);
+    }
+    else {
+        context.put("userId", user.p("id"));
+        context.put("User", user);
+        com.slfuture.angel.wechart.utility.Cache.set("OpenIDUserID", context.cookie.get("openid"), 24 * 60 * 60, user.p("id"));
+        return null;
+    }
+    context.set("reason", "用户信息真的很异常...");
+    return "outside.html";
+}
+if("wechart_authorize_userinfo" == context.parameters.get("state")) {
+    if(null == context.parameters.get("code")) {
+        context.set("reason", "额...竟然被拒绝授权了...");
+        return "outside.html";
+    }
+    var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + com.slfuture.carrie.utility.config.Configuration.root().visit("/logic/wechart/appid").get("") + "&secret=" + com.slfuture.carrie.utility.config.Configuration.root().visit("/logic/wechart/appsecret").get("") + "&code=" + context.parameters.get("code") + "&grant_type=authorization_code";
+    var result = com.slfuture.utility.wechart.utility.XMLHttpsUtil.get(url);
+    if(null == result) {
+        context.set("reason", "企鹅君没有反应...");
+        return "outside.html";
+    }
+    var j = eval("(" + result + ")");
+    if(undefined == j.openid) {
+        context.set("reason", "企鹅君返回了奇怪的结果...");
+        return "outside.html";
+    }
+	url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + j.access_token + "&openid=" + j.openid + "&lang=zh_CN";
+    result = com.slfuture.utility.wechart.utility.XMLHttpsUtil.get(url);
+    if(null == result) {
+        context.set("reason", "找企鹅君要资料没有理我...");
+        return "outside.html";
+    }
+	j = eval("(" + result + ")");
+	if(undefined == j.openid) {
+        context.set("reason", "企鹅君返回了奇怪的资料...");
+        return "outside.html";
+    }
+    var user = $("User", "OpenID = '" + j.openid + "'");
+    if(null != user) {
+        context.put("userId", user.p("id"));
+        context.put("User", user);
+        com.slfuture.angel.wechart.utility.Cache.set("OpenIDUserID", j.openid, 24 * 60 * 60, user.p("id"));
+        visitor.setCookie("openid", j.openid);
+        return null;
+    }
+	var waiter = $("Waiter", null);
+	var userId = waiter.c("register", j.nickname, j.sex, j.headimgurl, j.openid);
+	if(0 == userId) {
+        context.set("reason", "竟然注册失败了...");
+        return "outside.html";
+	}
+    context.put("userId", userId);
+    context.put("newUser", "true");
+    com.slfuture.angel.wechart.utility.Cache.set("OpenIDUserID", j.openid, 24 * 60 * 60, userId);
+    visitor.setCookie("openid", j.openid);
+    return null;
+}
+else {
+    context.set("scope", "snsapi_userinfo");
+    context.set("state", "wechart_authorize_userinfo");
+}
+context.set("appid", com.slfuture.carrie.utility.config.Configuration.root().visit("/logic/wechart/appid").get(""));
+context.set("url", encodeURIComponent("http://" + com.slfuture.carrie.utility.config.Configuration.root().visit("/logic/domain").get("") + "/" + context.uri()));
+return "authorize.url";

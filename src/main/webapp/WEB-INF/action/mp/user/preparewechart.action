@@ -1,0 +1,9 @@
+#include<mp/user.action>
+
+var url = decodeURIComponent(context.parameters.get("url"));
+var conf = com.slfuture.utility.wechart.js.JSHelper.fetchConfig(url);
+context.set("appId", conf.appId());
+context.set("timestamp", conf.timestamp());
+context.set("nonceString", conf.nonceString());
+context.set("signature", conf.signature());
+return "wechartconfig.json";

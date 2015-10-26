@@ -1,0 +1,5 @@
+var op = context.cookie.get("op");
+if("sl" != op) {
+    return "404.code";
+}
+return null;

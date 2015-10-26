@@ -1,0 +1,4 @@
+#include<mp/user.action>
+var messages = context.get("User").r("messages");
+context.set("messages", messages);
+return "mymessage.html";

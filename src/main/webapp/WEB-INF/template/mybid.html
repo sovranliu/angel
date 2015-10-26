@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>女神的晚餐</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<header class="amf-header">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <span>我的竞拍</span>
+</header>
+<div class="amf-content">
+    <div class="auc-tab">
+        <ul class="auc-tab-list">
+            <li>竞拍成功</li>
+            <li class="on">竞拍中</li>
+            <li>竞拍失败</li>
+        </ul>
+    </div>
+    <div class="auction-list-wrap">
+        <div class="auction-list">
+            #if(0 == ${bids1.size()})
+            <p class="noitem">暂无竞拍成功的活动</p>
+            #else
+            #foreach($bid1 in $bids1)
+            <a class="amf-item" href="/mp/user/activity?id=${bid1.get("activityId")}">
+            <img src="${bid1.get("angelPhoto")}" alt="">
+            <div class="detail">
+                <span class="title">${bid1.get("title")}
+                    #if("已支付" == ${bid1.get("status")})
+                        <span class="status green">已支付</span>
+                    #elseif("待支付" == ${bid1.get("status")})
+                        <span class="status orange">已支付</span>
+                    #end
+                </span>
+                <span class="auc-price">我的出价：￥${bid1.get("amount")}</span>
+                <span class="auc-price">
+                    #if(${bid1.get("expireTime")})
+                    截止时间：${bid1.get("expireTime")}
+                    #end
+                </span>
+                <span class="timer">${bid1.get("startTime").toString("MM-dd HH:mm")}</span>
+            </div>
+            </a>
+            #end
+            #end
+        </div>
+        <div class="auction-list">
+            #if(0 == ${bids2.size()})
+            <p class="noitem">暂无竞拍中的活动</p>
+            #else
+            #foreach($bid2 in $bids2)
+            <a class="amf-item" href="/mp/user/activity?id=${bid2.get("activityId")}">
+            <img src="${bid2.get("angelPhoto")}" alt="">
+            <div class="detail">
+                <span class="title">${bid2.get("title")}</span>
+                <span class="auc-price">我的出价：￥${bid2.get("amount")}</span>
+                <span class="auc-price">
+                #if(${bid2.get("expireTime")})
+                截止时间：${bid2.get("expireTime")}
+                #end
+                </span>
+                <span class="timer">${bid2.get("startTime").toString("MM-dd HH:mm")}</span>
+            </div>
+            </a>
+            #end
+            #end
+        </div>
+        <div class="auction-list">
+            #if(0 == ${bids3.size()})
+            <p class="noitem">暂无竞拍失败的活动</p>
+            #else
+            #foreach($bid3 in $bids3)
+            <a class="amf-item" href="/mp/user/activity?id=${bid3.get("activityId")}">
+            <img src="${bid3.get("angelPhoto")}" alt="">
+            <div class="detail">
+                <span class="title">${bid3.get("title")}
+                    #if("已放弃" == ${bid3.get("status")})
+                        <span class="status red">已放弃</span>
+                    #else
+                        <span class="status yellow">${bid3.get("status")}</span>
+                    #end
+                </span>
+                <span class="auc-price">我的出价：￥${bid3.get("amount")}</span>
+                <span class="auc-price">
+                #if(${bid3.get("expireTime")})
+                截止时间：${bid3.get("expireTime")}
+                #end
+                </span>
+                <span class="timer">${bid3.get("startTime").toString("MM-dd HH:mm")}</span>
+            </div>
+            </a>
+            #end
+            #end
+        </div>
+    </div>
+
+</div>
+<footer class="amf-footer">
+</footer>
+<div class="bg-wrap"></div>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+        });
+    })
+</script>
+</body>
+</html>

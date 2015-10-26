@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ANGEL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<header class="amf-header">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <span>支付</span>
+</header>
+<div class="amf-content">
+    <div class="pay">
+        <h2><i class="success-pay result-icon"></i> 恭喜您！</h2>
+        <p class="prise">您的申请已成功，快来与女神一起互动吧~！</p>
+    </div>
+    <div class="pay-clause">
+        <p>请仔细阅读以下条款：</p>
+        <p>1.支付活动金后，即可与女神聊天，确认活动详细信息；</p>
+        <p>2.与女神见面时，请使用本站首页扫一扫功能，扫描女神手机中的二维码，女神即可收到活动金；</p>
+        <p>3.如见面时未扫描，女神有权拒绝本次活动；</p>
+        <p>4.如遇不可抗力或其他原因导致活动失败，请至活动详情页选择放弃约会，本次活动金额将退回至您的微信钱包中。</p>
+        <p>请仔细阅读以下条款：</p>
+        <p>1.支付活动金后，即可与女神聊天，确认活动详细信息；</p>
+        <p>2.与女神见面时，请使用本站首页扫一扫功能，扫描女神手机中的二维码，女神即可收到活动金；</p>
+        <p>3.如见面时未扫描，女神有权拒绝本次活动；</p>
+        <p>4.如遇不可抗力或其他原因导致活动失败，请至活动详情页选择放弃约会，本次活动金额将退回至您的微信钱包中。</p>
+        <p>请仔细阅读以下条款：</p>
+        <p>1.支付活动金后，即可与女神聊天，确认活动详细信息；</p>
+        <p>2.与女神见面时，请使用本站首页扫一扫功能，扫描女神手机中的二维码，女神即可收到活动金；</p>
+        <p>3.如见面时未扫描，女神有权拒绝本次活动；</p>
+        <p>4.如遇不可抗力或其他原因导致活动失败，请至活动详情页选择放弃约会，本次活动金额将退回至您的微信钱包中。</p>
+    </div>
+    <div class="pay-info">
+        <p>您将支付 总价<span>¥ ${amount}</span>元</p>
+        <div class="btn-wrap pay-btn-wrap">
+            <button id="cancel-pay" class="cancel-pay btn">取消支付</button>
+            <button id="chooseWXPay" class="confirm-pay btn">确认支付</button>
+        </div>
+        <span>女神已同意您的申请，请您确认支付金额并及时支付，如放弃本次支付，将被扣取一定的信誉积分，请您知悉，谢谢。</span>
+    </div>
+</div>
+<footer class="amf-footer">
+</footer>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+        });
+        new angel.WXconfig({
+            "bid_id":'${bidId}',
+            "activity_id":'${activityId}',
+            "appId":'${appId}',
+            "timestamp":'${timestamp}',
+            "nonceStr":'${nonceString}',
+            "signature":'${signature}'
+        });
+    })
+</script>
+</body>
+</html>

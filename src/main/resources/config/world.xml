@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<world>
+	<clusters>
+        <User primarykey="id" class="com.slfuture.angel.wechart.object.User">
+            <relations>
+                <relation name="messages" target="Message" mode="0-N">
+                    <condition category="link" type="EQUAL" self-field="id" other-field="userId" />
+                </relation>
+                <relation name="activities" target="ActivityInfo" mode="0-N">
+                    <condition category="link" type="EQUAL" self-field="id" other-field="angelId" />
+                </relation>
+                <relation name="bids" target="Bid" mode="0-N">
+                    <condition category="link" type="EQUAL" self-field="id" other-field="userId" />
+                </relation>
+            </relations>
+            <catcher>
+                <catch target="Message" mode="0-1" event="MessageRead">
+                    <condition category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="ActivityGiveup">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="ActivityInterrupt">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="ActivityDeal">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="ActivityApproval">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="NewBid">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="BidInterrupt">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="ActivityPay">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="BidderSpeak">
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="ActivityPay">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="BidChoose">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="BidGiveup">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="ActivityDeal">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="ActivityInterrupt">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="Refund">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="AngelSpeak">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </catch>
+            </catcher>
+        </User>
+        <ActivityInfo primarykey="ID" class="com.slfuture.angel.wechart.object.ActivityInfo">
+            <relations>
+                <relation name="city" target="City" mode="0-1">
+                    <condition category="prerequisite" type="NOTEQUAL" self-field="cityId" value="(int)0" />
+                    <condition link="and" category="link" type="EQUAL" self-field="cityId" other-field="id" />
+                </relation>
+                <relation name="detail" target="ActivityDetail" mode="1">
+                    <condition link="and" category="link" type="EQUAL" self-field="id" other-field="id" />
+                </relation>
+            </relations>
+        </ActivityInfo>
+		<ActivityDetail primarykey="ID" class="com.slfuture.angel.wechart.object.ActivityDetail">
+			<relations>
+				<relation name="angel" target="User" mode="0-1">
+                    <condition category="prerequisite" type="NOTEQUAL" self-field="angelId" value="(int)0" />
+                    <condition link="and" category="link" type="EQUAL" self-field="angelId" other-field="id" />
+				</relation>
+                <relation name="city" target="City" mode="0-1">
+                    <condition category="prerequisite" type="NOTEQUAL" self-field="cityId" value="(int)0" />
+                    <condition link="and" category="link" type="EQUAL" self-field="cityId" other-field="id" />
+                </relation>
+                <relation name="bids" target="Bid" mode="0-N">
+                    <condition link="and" category="link" type="EQUAL" self-field="id" other-field="activityId" />
+                </relation>
+                <relation name="deal" target="Bid" mode="0-1">
+                    <condition category="prerequisite" type="NOTEQUAL" self-field="bidId" value="(int)0" />
+                    <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
+                </relation>
+			</relations>
+            <catcher>
+                <catch target="Bid" mode="0-1" event="BidInterrupt">
+                    <condition link="and" category="link" type="EQUAL" self-field="activityId" other-field="id" />
+                </catch>
+                <catch target="Bid" mode="0-1" event="ActivityPay">
+                    <condition link="and" category="link" type="EQUAL" self-field="activityId" other-field="id" />
+                </catch>
+            </catcher>
+            <events>
+                <event name="ActivityGiveup" class="com.slfuture.angel.wechart.event.ActivityGiveupEvent" />
+                <event name="ActivityInterrupt" class="com.slfuture.angel.wechart.event.ActivityInterruptEvent" />
+                <event name="ActivityDeal" class="com.slfuture.angel.wechart.event.ActivityDealEvent" />
+                <event name="ActivityApproval" class="com.slfuture.angel.wechart.event.ActivityApprovalEvent" />
+                <event name="BidInterrupt" class="com.slfuture.angel.wechart.event.BidInterruptEvent" />
+                <event name="ActivityPay" class="com.slfuture.angel.wechart.event.ActivityPayEvent" />
+                <event name="AngelSpeak" class="com.slfuture.angel.wechart.event.AngelSpeakEvent" />
+                <event name="BidderSpeak" class="com.slfuture.angel.wechart.event.BidderSpeakEvent" />
+            </events>
+		</ActivityDetail>
+        <ActivityApproval primarykey="ID" class="com.slfuture.angel.wechart.object.ActivityApproval">
+            <relations>
+                <relation name="city" target="City" mode="0-1">
+                    <condition category="prerequisite" type="NOTEQUAL" self-field="cityId" value="(int)0" />
+                    <condition link="and" category="link" type="EQUAL" self-field="cityId" other-field="id" />
+                </relation>
+            </relations>
+        </ActivityApproval>
+        <Stage primarykey="id" class="com.slfuture.angel.wechart.object.Stage">
+            <relations>
+            </relations>
+        </Stage>
+        <Region primarykey="id" class="com.slfuture.angel.wechart.object.Region">
+            <relations>
+                <relation name="hot" target="City" mode="0-N">
+                </relation>
+            </relations>
+        </Region>
+        <City primarykey="id" class="com.slfuture.angel.wechart.object.City">
+            <relations></relations>
+        </City>
+        <Ad primarykey="id" class="com.slfuture.angel.wechart.object.Ad">
+            <relations></relations>
+        </Ad>
+        <Message primarykey="id" class="com.slfuture.angel.wechart.object.Message">
+            <relations>
+                <relation name="user" target="User" mode="1">
+                    <condition category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </relation>
+            </relations>
+            <events>
+                <event name="MessageRead" class="com.slfuture.angel.wechart.event.MessageReadEvent" />
+            </events>
+        </Message>
+        <Bid primarykey="id" class="com.slfuture.angel.wechart.object.Bid">
+            <relations>
+                <relation name="user" target="User" mode="1">
+                    <condition link="and" category="link" type="EQUAL" self-field="userId" other-field="id" />
+                </relation>
+                <relation name="activity" target="ActivityDetail" mode="1">
+                    <condition link="and" category="link" type="EQUAL" self-field="activityId" other-field="id" />
+                </relation>
+            </relations>
+            <events>
+                <event name="ActivityDeal" class="com.slfuture.angel.wechart.event.ActivityDealEvent" />
+                <event name="ActivityInterrupt" class="com.slfuture.angel.wechart.event.ActivityInterruptEvent" />
+                <event name="Refund" class="com.slfuture.angel.wechart.event.RefundEvent" />
+                <event name="BidInterrupt" class="com.slfuture.angel.wechart.event.BidInterruptEvent" />
+                <event name="BidChoose" class="com.slfuture.angel.wechart.event.BidChooseEvent" />
+                <event name="BidGiveup" class="com.slfuture.angel.wechart.event.BidGiveupEvent" />
+                <event name="ActivityPay" class="com.slfuture.angel.wechart.event.ActivityPayEvent" />
+                <event name="AngelSpeak" class="com.slfuture.angel.wechart.event.AngelSpeakEvent" />
+            </events>
+            <catcher>
+                <catch target="ActivityDetail" mode="0-1" event="ActivityDeal">
+                    <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="ActivityInterrupt">
+                    <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="BidInterrupt">
+                    <condition link="and" category="prerequisite" type="EQUAL" self-field="status" value="(int)3" />
+                    <condition link="and" category="link" type="EQUAL" self-field="id" other-field="activityId" />
+                    <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
+                </catch>
+                <catch target="ActivityDetail" mode="0-1" event="AngelSpeak">
+                    <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
+                </catch>
+            </catcher>
+        </Bid>
+        <Waiter primarykey="id" class="com.slfuture.angel.wechart.object.Waiter">
+        </Waiter>
+	</clusters>
+</world>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>女神的晚餐</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<header class="amf-header">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <span>我的活动</span>
+    <a class="startact" href="/mp/user/organize">发起</a>
+</header>
+<div class="amf-content">
+    #foreach($activity in $activities)
+    <a class="amf-item" href="/mp/user/activity?id=${activity.p("id")}">
+        <img src="${activity.c("primaryPhoto")}" alt="">
+        <div class="detail">
+            <span class="title">${activity.p("title")}</span>
+            <span class="activity">${activity.p("content")}</span>
+            <span class="timer">${activity.p("startTime").toString("MM-dd HH:mm")}</span>
+            <span class="address">${activity.p("region")}</span>
+        </div>
+    </a>
+    #end
+</div>
+<footer class="amf-footer">
+</footer>
+<div class="bg-wrap"></div>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+        });
+    })
+</script>
+</body>
+</html>

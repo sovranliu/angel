@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+	<display-name>Angel Web</display-name>
+	<session-config>
+		<session-timeout>0</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+    <listener>
+        <listener-class>com.slfuture.carrie.lightning.access.EnvironmentListener</listener-class>
+    </listener>
+	<!-- lightning过滤器 -->
+	<filter>
+        <filter-name>Lightning</filter-name>
+		<filter-class>com.slfuture.carrie.lightning.access.ServletFilter</filter-class>
+	</filter>
+    <filter-mapping>
+        <filter-name>Lightning</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>

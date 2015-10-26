@@ -1,0 +1,11 @@
+// #include<mp/user/authority.action>
+var url = com.slfuture.utility.aliyun.OSS.instance().put(context.parameters.get("file"));
+if(null == url) {
+    context.set("code", -1);
+    context.set("msg", "inner error");
+    return "error.json";
+}
+context.set("code", 0);
+context.set("msg", "");
+context.set("data", "\"" + url + "\"");
+return "success.json";

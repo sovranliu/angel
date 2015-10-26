@@ -1,0 +1,15 @@
+{
+#if(${code})
+"code":${code}
+#else
+"code":-1
+#end
+#if(${msg})
+,"msg":"${msg}"
+#else
+,"msg":""
+#end
+#if(${redirect})
+,"redirect":"${redirect}"
+#end
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>女神的晚餐</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<div class="amf-content pd-55">
+    <div id="slider" class="swipe" style="height:320px;">
+        <div class="swipe-wrap">
+            #foreach($photo in $activity.p("photoList"))
+            <div class="wrap">
+                <img src="$photo" alt="">
+            </div>
+            #end
+        </div>
+        <nav>
+            <ul id="position" class="position">
+            </ul>
+        </nav>
+    </div>
+    <p class="act-title">${activity.p("title")}</p>
+    #if(true == ${isAngel})
+    #if(6 == ${activityStatus} || 7 == ${activityStatus} || 8 == ${activityStatus} || 9 == ${activityStatus})
+    <div class="buyer">
+        <span class="buyimg"><img src="${bidderPhoto}" alt=""></span>
+        <span class="buyname">${bidderNickName}</span>
+        <span class="buyprice">${bidderAmount}元</span>
+    </div>
+    #end
+    #elseif(${bidId})
+    <div class="buyer">
+        #if(${bidderPhoto})
+        <span class="buyimg">
+            <img src="${bidderPhoto}" alt="">
+        </span>
+        #end
+        #if(${bidderNickName})
+        <span class="buyname">${bidderNickName}</span>
+        #end
+        #if(${bidderAmount})
+        <span class="buyprice">${bidderAmount}元</span>
+        #end
+    </div>
+    #end
+    <ul class="active-block">
+        <li><label>活动状态：</label>
+            #if(1 == ${activityStatus})
+            待审核
+            #elseif (2 == ${activityStatus})
+            被驳回
+            #elseif (3 == ${activityStatus})
+            您撤销了申请
+            #elseif (4 == ${activityStatus})
+            #if(1 == ${bidStatus})
+            发布中
+            #elseif(2 == ${bidStatus})
+            您已撤销竞拍
+            #elseif(3 == ${bidStatus})
+            已中标
+            #elseif(4 == ${bidStatus})
+            已中标
+            #else
+            发布中
+            #end
+            #elseif (5 == ${activityStatus})
+            #if(true == ${isAngel})
+            您取消了活动
+            #elseif(0 != ${bidStatus})
+            活动已被取消
+            #else
+            活动已被取消
+            #end
+            #elseif (6 == ${activityStatus})
+            #if(true == ${isAngel})
+            已确立，待约会
+            #elseif(true == ${isWinner})
+            已确立，去约会吧
+            #else
+            未拍中
+            #end
+            #elseif (7 == ${activityStatus})
+            #if(true == ${isAngel})
+            您主动放弃了约会
+            #elseif(true == ${isWinner})
+            约会被取消，已退款
+            #else
+            未拍中
+            #end
+            #elseif (8 == ${activityStatus})
+            #if(true == ${isAngel})
+            竞拍者放弃了约会
+            #elseif(true == ${isWinner})
+            您主动放弃了约会
+            #else
+            未拍中
+            #end
+            #elseif (9 == ${activityStatus})
+            #if(true == ${isAngel})
+            圆满结束
+            #elseif(true == ${isWinner})
+            圆满结束
+            #else
+            未拍中
+            #end
+            #end
+        </li>
+
+        #if(2 == ${activityStatus})
+        <li><label>拒绝原因：</label> ${activity.p("memo")}</li>
+        #elseif (7 == ${activityStatus} || 8 == ${activityStatus})
+        #if(true == ${isAngel})
+        <li><label>违约理由：</label> ${activity.p("memo")}</li>
+        #elseif(true == ${isWinner})
+        <li><label>违约理由：</label> ${activity.p("memo")}</li>
+        #end
+        #end
+
+    </ul>
+    <div class="line-depart"></div>
+    <ul class="active-block">
+        <li><label>所在城市：</label>${activity.r("city").p("name")}</li>
+        <li><label>活动区域：</label>${activity.p("region")}</li>
+        <li><label>竞拍截止：</label>${activity.p("prepareTime").toString("MM-dd HH:mm")}</li>
+        <li><label>公布截止：</label>${activity.p("auctionTime").toString("MM-dd HH:mm")}</li>
+        <li><label>活动时间：</label>${activity.p("startTime").toString("MM-dd HH:mm")}</li>
+        <li><label>活动费用：</label>${activity.p("basicPrice")}元</li>
+        <li><label>目前最高竞拍：</label><em>${activity.c("getCurrentPrice")}元</em></li>
+    </ul>
+    <div class="line-depart"></div>
+    <ul class="active-block">
+        <h4>活动主介绍</h4>
+        <li><label>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>${activity.p("mockName")}</li>
+        <li><label>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</label>${activity.r("angel").p("career")}</li>
+        <li><label>信&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;誉：</label>${credit}</li>
+    </ul>
+    <div class="line-depart"></div>
+    <div class="active-block">
+        <h4>活动内容</h4>
+        <p>${activity.p("content").replace("\n", "<br />")}</p>
+    </div>
+    <div class="line-depart"></div>
+    <div class="active-block">
+        <h4>竞拍要求</h4>
+        #if(${activity.p("needPhoto")})
+        <p>竞拍者必须上传真实照片</p>
+        #end
+        <p>${activity.p("rules").replace("\n", "<br />")}</p>
+    </div>
+
+    <div class="btn-wrap">
+        #if(${activityStatus} < 3)
+        #if(true == ${isAngel})
+        <!-- 发起人视角 -->
+        <button id="giveup-activity" class="no-apply-btn btn">撤销申请</button>
+        #end
+        #elseif(4 == ${activityStatus})
+        #if(true == ${isAngel})
+        <!-- 发起人视角 -->
+        <button id="cancel-activity" class="no-apply-btn btn">取消活动</button>
+        <a href="/mp/user/activitybid?activity=${activityId}" class="apply-btn btn">查看竞拍</a>
+        #elseif(0 == ${bidStatus})
+        <!-- 游客视角 -->
+        <a class="apply-btn btn" href="/mp/user/apply?activity=${activityId}">参与竞拍</a>
+        #elseif (1 == ${bidStatus})
+        <!-- 竞拍者视角 -->
+        <button id="giveup-apply" class="no-apply-btn btn">撤销竞拍</button>
+        <a href="/mp/user/apply?activity=${activityId}" class="edit-apply-btn btn" >重新竞拍</a>
+        #elseif (2 == ${bidStatus})
+
+        #elseif (3 == ${bidStatus})
+        <!-- 中标者视角 -->
+        <button id="cancel-apply" class="no-apply-btn btn">放弃资格</button>
+        <a href="/mp/user/pay?bid=${bidId}" class="apply-btn btn">支付竞价</a>
+        #elseif (4 == ${bidStatus})
+        <!-- 中标者视角 -->
+        <button id="cancel-apply" class="no-apply-btn btn">放弃资格</button>
+        <a href="/mp/user/pay?bid=${bidId}" class="apply-btn btn">支付竞价</a>
+        #elseif (5 == ${bidStatus})
+
+        #elseif (6 == ${bidStatus})
+
+        #elseif (7 == ${bidStatus})
+
+        #end
+        #elseif (5 == ${activityStatus})
+
+        #elseif (6 == ${activityStatus})
+        #if(true == ${isAngel})
+        <!-- 发起人视角 -->
+        <button id="interrupt-activity" class="no-apply-btn btn">放弃约会</button>
+        <a href="/mp/user/chart?activity=${activityId}" class="apply-btn btn">去聊一聊</a>
+        #elseif(0 == ${bidStatus})
+
+        #elseif (1 == ${bidStatus})
+
+        #elseif (2 == ${bidStatus})
+
+        #elseif (3 == ${bidStatus})
+
+        #elseif (4 == ${bidStatus})
+
+        #elseif (5 == ${bidStatus})
+
+        #elseif (6 == ${bidStatus})
+        #if(true == ${isWinner})
+        <button id="interrupt-apply" class="no-apply-btn btn">放弃约会</button>
+        <a href="/mp/user/chart?activity=${activityId}" class="apply-btn btn">去聊一聊</a>
+        #end
+        #elseif (7 == ${bidStatus})
+
+        #end
+        #elseif (7 == ${activityStatus})
+        #elseif (8 == ${activityStatus})
+        #elseif (9 == ${activityStatus})
+        #end
+    </div>
+</div>
+<div class="view cui-layer">
+    <div class="cui-pop-box">
+        <div class="cui-hd">
+            <div class="cui-text-center">放弃约会</div>
+            <div class="lab-close-area js_close"><span class="cui-top-close">×</span>
+            </div>
+        </div>
+        <div class="cui-bd cui-roller-bd">
+            <div class="cui-select-view">
+                <p class="title">放弃约会（放弃会扣取您大量信誉值，竞拍者会收到完整退款）</p>
+                <p class="title">请输入放弃原因：</p>
+                <input id="giveup-date-input" type="text">
+                <span class="error">不能为空</span>
+                #if(true == ${isAngel})
+                <button id="confirm-interrupt-activity" class="confirm-btn">确定</button>
+                #elseif(true == ${isWinner})
+                <button id="confirm-interrupt-apply" class="confirm-btn">确定</button>
+                #end
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg-mast"></div>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/jquery.cookie.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+            "bid_id":'${bidId}',
+            "activity":'${activityId}'
+        })
+    })
+</script>
+</body>
+</html>

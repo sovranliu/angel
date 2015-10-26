@@ -1,0 +1,26 @@
+// 微信回调通知
+var signature = context.parameters.get("signature");
+if(null == signature) {
+    return "certificate.txt";
+}
+// 时间戳
+var timestamp = context.parameters.get("timestamp");
+if(null == timestamp) {
+    return "certificate.txt";
+}
+// 随机数
+var nonceString = context.parameters.get("nonce");
+if(null == nonceString) {
+    return "certificate.txt";
+}
+// 随机字符串
+var echoString = context.parameters.get("echostr");
+if(null == echoString) {
+    return "certificate.txt";
+}
+//
+var result = com.slfuture.utility.wechart.certificate.Helper.check(signature, timestamp, nonceString);
+if(true == result) {
+    context.set("result", echoString);
+}
+return "certificate.txt";

@@ -1,0 +1,36 @@
+{
+  "code":0,
+  "data":[
+#foreach($chart in $charts)
+  #if($velocityCount > 1)
+,
+  #end
+  {
+  "id": ${chart.id()},
+  "time": "${chart.time().toString("MM-dd HH:mm")}",
+  "name":
+  #if(${angelId} == ${chart.userId()})
+"${angelName}"
+  #else
+"${bidderName}"
+  #end
+,
+  "photo":
+  #if(${angelId} == ${chart.userId()})
+"${angelPhoto}"
+  #else
+"${bidderPhoto}"
+  #end
+,
+  "speaker":
+  #if(${userId} == ${chart.userId()})
+"self"
+  #else
+"other"
+  #end
+,
+  "content": "${chart.content()}"
+  }
+#end
+  ]
+}

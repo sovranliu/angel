@@ -1,0 +1,119 @@
+#include<mp/user.action>
+#include<library/common.function>
+
+context.set("msg", "");
+var typeString = context.parameters.get("type");
+if(null == typeString || "" == typeString) {
+    context.set("code", -1);
+    context.set("msg", "活动类型不正确");
+    return "error.json";
+}
+var type = parseInt(typeString);
+var title = context.parameters.get("title");
+if(null == title || "" == title) {
+    context.set("code", -2);
+    context.set("msg", "活动标题未填写");
+    return "error.json";
+}
+var mockName = context.parameters.get("mockname");
+if(null == mockName || "" == mockName) {
+    context.set("code", -2);
+    context.set("msg", "您在本次活动中的昵称未填写");
+    return "error.json";
+}
+var photosString = context.parameters.get("photos");
+if(null == photosString || "" == photosString) {
+    context.set("code", -3);
+    context.set("msg", "请上传照片");
+    return "error.json";
+}
+var photos = com.slfuture.carrie.base.text.Text.cut(photosString, ",");
+var prepareTime = parseDateTime(context.parameters.get("preparetime"));
+if(null == prepareTime) {
+    context.set("code", -4);
+    context.set("msg", "请设置竟拍截止时间");
+    return "error.json";
+}
+var auctionTime = parseDateTime(context.parameters.get("auctiontime"));
+if(null == auctionTime) {
+    context.set("code", -5);
+    context.set("msg", "请设置遴选截止时间");
+    return "error.json";
+}
+var startTime = parseDateTime(context.parameters.get("starttime"));
+if(null == startTime) {
+    context.set("code", -6);
+    context.set("msg", "请设置活动开始时间");
+    return "error.json";
+}
+var cityIdString = context.parameters.get("cityid");
+if(null == cityIdString || "" == cityIdString) {
+    context.set("code", -7);
+    context.set("msg", "请选择活动城市");
+    return "error.json";
+}
+var cityId = parseInt(cityIdString);
+var region = context.parameters.get("region");
+if(null == region || "" == region) {
+    context.set("code", -8);
+    context.set("msg", "请填写活动大致区域");
+    return "error.json";
+}
+var address = context.parameters.get("address");
+if(null == address || "" == address) {
+    context.set("code", -9);
+    context.set("msg", "请填写活动具体位置");
+    return "error.json";
+}
+var content = context.parameters.get("content");
+if(null == content || "" == content) {
+    context.set("code", -10);
+    context.set("msg", "请填写活动内容");
+    return "error.json";
+}
+var rules = context.parameters.get("rules");
+if(null == rules) {
+    rules = "";
+}
+var needPhoto = false;
+var needPhotoString = context.parameters.get("needphoto");
+if("1" == needPhotoString) {
+    needPhoto = true;
+}
+var memo = context.parameters.get("memo");
+if(null == memo) {
+    memo = "";
+}
+var basicPriceString = context.parameters.get("basicprice");
+if(null == basicPriceString || "" == basicPriceString) {
+    context.set("code", -14);
+    context.set("msg", "请填写活动底价");
+    return "error.json";
+}
+var basicPrice = parseInt(basicPriceString);
+var donate = context.parameters.get("donate");
+if(null == donate || "" == donate) {
+    context.set("code", -15);
+    context.set("msg", "请填写捐赠比例");
+    return "error.json";
+}
+donate = parseInt(donate);
+//
+var user = context.get("User");
+var result = user.c("launch", type, title, mockName, photosString, prepareTime, auctionTime, startTime, cityId, region, address, content, rules, needPhoto, memo, basicPrice * 100, donate);
+if(-2 == result) {
+    context.set("msg", "请检查时间设置");
+    context.set("code", -15);
+    return "error.json";
+}
+else if(result < 0) {
+    context.set("msg", "投放失败，请检查参数");
+    context.set("code", -15);
+    return "error.json";
+}
+var name = context.parameters.get("name");
+var career = context.parameters.get("career");
+user.c("update", name, career, photosString);
+context.set("code", 0);
+context.set("data", result);
+return "success.json";

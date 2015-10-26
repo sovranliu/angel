@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>选择城市</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<header class="amf-header">
+    <a href="javascript:;" class="city">上海</a>
+    <span>选择城市</span>
+</header>
+<div class="amf-content">
+    <div class="search-box gray">
+        <input id="putin" type="text" placeholder="请输入城市名称或拼音查询">
+        <p>近期选择城市</p>
+        <div class="current-city">
+        </div>
+        <p>城市列表</p>
+    </div>
+    <ul id="forselect">
+        #foreach($city in $cities)
+            <li class="row" data-code="${city.p("id")}">${city.p("name")}</li>
+        #end
+    </ul>
+    <p class="morecity">更多城市请直接搜索</p>
+</div>
+<footer class="amf-footer">
+</footer>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/jquery.cookie.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+            "isCookie":true
+        });
+    })
+</script>
+</body>
+</html>

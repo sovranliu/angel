@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//log4j/log4j Configuration//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" threshold="null" debug="null">
+	<appender name="common" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/app/log/angel-mp/app.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[angel-mp] %d %-5p %l [%c] %m%n" />
+		</layout>
+	</appender>
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[angel-wechart] %d %-5p %l [%c] %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="levelMin" value="debug" />
+            <param name="levelMax" value="error" />
+            <param name="AcceptOnMatch" value="true" />
+        </filter>
+    </appender>
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="common" />
+        <appender-ref ref="console" />
+	</root>
+</log4j:configuration>

@@ -1,0 +1,6 @@
+#include<mp/user.action>
+var user = context.get("User");
+context.set("code", 0);
+context.set("msg", "");
+context.set("data", user.c("messageCount"));
+return "success.json";

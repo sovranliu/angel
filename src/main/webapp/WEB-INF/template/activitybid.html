@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>女神的晚餐</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="候选人">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+<header class="amf-header">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <span>竞拍情况</span>
+    <button class="sort">排序</button>
+    <ul class="sort-list">
+        <li><a href="/mp/user/activitybid?activity=${activity}&order=1">时间最近</a></li>
+        <li><a href="/mp/user/activitybid?activity=${activity}&order=2">竞价最高</a></li>
+        <li><a href="/mp/user/activitybid?activity=${activity}&order=3">信誉最高</a></li>
+    </ul>
+</header>
+<div class="amf-content">
+    #foreach($bidInfo in $bidInfos)
+    <div class="pt-list amf-item">
+        <img src="${bidInfo.get("photo")}" alt="">
+        <div class="detail">
+            <span class="ptname" data-bid="${bidInfo.get("bidId")}">${bidInfo.get("nickName")}<span class="accepted ${bidInfo.get("sign")}">${bidInfo.get("status")}</span></span>
+            <span class="ptprice">信誉：${bidInfo.get("credit")}</span>
+            <span class="pttimer">截止时间：${bidInfo.get("expireTime")}</span>
+            <span class="ptprice"><em>${bidInfo.get("amount")}</em>元</span>
+            #if(true == ${bidInfo.get("black")})
+                <div class="pt-btn-s">
+                    <button class="release">解除屏蔽</button>
+                </div>
+            #else
+                <div class="pt-btn-f">
+                    <button class="shield">屏蔽</button>
+                    #if("竞拍中" == ${bidInfo.get("status")})
+                    <button class="accept">接受</button>
+                    #end
+                </div>
+            #end
+        </div>
+    </div>
+    #end
+</div>
+<footer class="amf-footer">
+</footer>
+<div class="bg-wrap"></div>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/swipe.js"></script>
+<script src="/js/base.js"></script>
+<script>
+    $(function(){
+        new angel.Index({
+        });
+    })
+</script>
+</body>
+</html>

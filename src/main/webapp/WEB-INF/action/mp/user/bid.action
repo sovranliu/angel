@@ -1,0 +1,49 @@
+#include<mp/user.action>
+#include<library/common.function>
+
+context.set("msg", "");
+var activityId = context.parameters.get("activityid");
+if(null == activityId || "" == activityId) {
+    context.set("code", -1);
+    context.set("msg", "未选择活动");
+    return "error.json";
+}
+activityId = parseInt(activityId);
+var activity = $("ActivityDetail", "id = " + activityId);
+if(null == activity) {
+    context.set("code", -1);
+    context.set("msg", "活动不存在");
+    return "error.json";
+}
+var amount = context.parameters.get("amount");
+if(null == amount || "" == amount) {
+    context.set("code", -2);
+    return "error.json";
+}
+amount = parseInt(amount);
+var expireTime = parseDateTime(context.parameters.get("expiretime"));
+if(null != expireTime && expireTime.compareTo(com.slfuture.carrie.base.time.DateTime.now()) <= 10 * 60 * 1000) {
+    context.set("code", -3);
+    context.set("msg", "竞拍反馈截止时间不能小于10分钟内");
+    return "error.json";
+}
+var photo = context.parameters.get("photo");
+if(null == photo || "" == photo) {
+    if(true == activity.p("needPhoto")) {
+        context.set("code", -4);
+        context.set("msg", "本活动要求竞拍者出示真实照片");
+        return "error.json";
+    }
+}
+var user = context.get("User");
+// 竞拍
+var result = user.c("bid", activityId, amount, photo, expireTime);
+if(result < 0) {
+    context.set("msg", "内部错误");
+    context.set("code", -5);
+    return "error.json";
+}
+context.set("code", 0);
+context.set("msg", "竞拍申请已经投递");
+context.set("redirect", "/mp/user/mybid");
+return "success.json";
