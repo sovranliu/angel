@@ -13,7 +13,7 @@ if(null == bid) {
 }
 if(0 != bid.c("canPay")) {
     context.set("code", -2);
-    context.set("msg", "活动已下线或抢险支付");
+    context.set("msg", "活动已下线或遭其他中标者抢先支付");
     return "error.json";
 }
 var result = bid.c("order", visitor.ip);

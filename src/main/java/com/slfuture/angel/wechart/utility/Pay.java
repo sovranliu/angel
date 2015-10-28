@@ -52,13 +52,21 @@ public class Pay {
      * 获取总价中需要支付的金额
      *
      * @param amount 总价
+     * @param donate 捐赠比例
      * @return 支付金额
      */
-    public static int getPayAmount(int amount) {
+    public static int getPayAmount(int amount, int donate) {
         if(amount <= 0) {
             return 0;
         }
-        return amount * PAY_PERCENT / 100;
+        int fee = PAY_PERCENT - donate;
+        if(fee < 0) {
+            fee = 0;
+        }
+        else if(fee > 100) {
+            fee = PAY_PERCENT;
+        }
+        return amount * fee / 100;
     }
 
     /**

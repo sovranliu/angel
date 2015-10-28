@@ -90,6 +90,7 @@ public class Activity implements Serializable {
      *
      * @return 照片集合
      */
+    @Method
     public String[] photos() {
         return photos.split(",");
     }

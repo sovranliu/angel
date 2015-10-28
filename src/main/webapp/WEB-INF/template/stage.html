@@ -47,13 +47,14 @@
         <li id="mymsg"><i></i><a href="/mp/user/mymessage">我的消息</a></li>
         <li><i></i><a href="/mp/user/myactivity">我的活动</a></li>
         <li><i></i><a href="/mp/user/mybid">我的竞拍</a></li>
+        <li><i></i><a href="/mp/user/organize">发起活动</a></li>
         <li id="scanQRCode1"><i></i>扫一扫</li>
     </ul>
 </header>
 <div id="slider" class="swipe adver">
     <div class="swipe-wrap">
         #foreach($ad in $ads)
-        <div class="ad-wrap">
+        <div class="wrap">
             <a href="${ad.p("link")}">
             <img src="${ad.p("image")}" alt="${ad.p("id")}">
             </a>
@@ -62,8 +63,6 @@
     </div>
     <nav>
         <ul id="position" class="ad-position position">
-            <li class="on"></li>
-            <li class=""></li>
         </ul>
     </nav>
 </div>
@@ -72,7 +71,9 @@
     #foreach($activity in $activities)
     <a href="activity?id=${activity.id()}" class="amf-list">
         <h4>${activity.title()}</h4>
-        <img src="#" class="act-img" data-src="${activity.primaryPhoto()}" alt="">
+        <div class="img-wrap">
+            <img src="#" class="act-img" data-src="${activity.primaryPhoto()}" alt="">
+        </div>
         <p>${activity.content()}</p>
         <div class="amf-info">
             <div class="amf-block">
@@ -99,8 +100,8 @@ ${activity.region()}
 #if("$!activity.career()" == "")
 不告诉你
 #else
-    #if(${activity.region().length()} > 5)
-${activity.career().substring(0, 4)}..
+    #if(${activity.career().length()} > 5)
+${activity.career().substring(0, 4)}
     #else
 ${activity.career()}
     #end
@@ -123,11 +124,10 @@ ${activity.career()}
             </div>
         </div>
     </a>
+
     <div class="line-depart"></div>
     #end
 </div>
-<footer class="amf-footer">
-</footer>
 <div class="bg-wrap"></div>
 <div class="bg-mast"></div>
 <script src="/js/jquery2.0.3.js"></script>
@@ -140,14 +140,11 @@ ${activity.career()}
         new angel.Index({
             "circle":true,
             "isCookie":true,
-            isMsg:true
+            isMsg:true,
+            swipe:true
         });
         new angel.LazyLoadImg({});
         new angel.WXconfig({
-            "appId":'${appId}',
-            "timestamp":'${timestamp}',
-            "nonceStr":'${nonceString}',
-            "signature":'${signature}'
         });
     })
 </script>

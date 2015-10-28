@@ -187,7 +187,8 @@
         </div>
         <div class="form-item">
             <label>活动起拍价：</label>
-            <span>${activity.p("basicPrice")}</span>
+            #set($amount = ${activity.p("basicPrice")} / 100)
+            <span>$amount</span>
         </div>
         <div class="form-item">
             <label>慈善比例：</label>
@@ -212,10 +213,13 @@
             <span>${activity.p("memo")}</span>
         </div>
         <div class="line-depart"></div>
-
         <div class="form-item">
-            <label>我的昵称：</label>
+            <label>微信昵称：</label>
             <span>${activity.p("nickName")}</span>
+        </div>
+        <div class="form-item">
+            <label>活动昵称：</label>
+            <span>${activity.p("mockName")}</span>
         </div>
         <div class="form-item">
             <label>我的职业：</label>

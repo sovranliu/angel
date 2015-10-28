@@ -18,7 +18,7 @@
 </head>
 <body>
 <header class="amf-header">
-    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <a href="/mp/user/stage" class="home"></a>
     <span>竞拍情况</span>
     <button class="sort">排序</button>
     <ul class="sort-list">
@@ -37,17 +37,22 @@
             <span class="pttimer">截止时间：${bidInfo.get("expireTime")}</span>
             <span class="ptprice"><em>${bidInfo.get("amount")}</em>元</span>
             #if(true == ${bidInfo.get("black")})
-                <div class="pt-btn-s">
-                    <button class="release">解除屏蔽</button>
-                </div>
+            <div class="pt-btn-s onshow">
             #else
-                <div class="pt-btn-f">
-                    <button class="shield">屏蔽</button>
-                    #if("竞拍中" == ${bidInfo.get("status")})
-                    <button class="accept">接受</button>
-                    #end
-                </div>
+            <div class="pt-btn-s">
             #end
+                <button class="release">解除屏蔽</button>
+            </div>
+            #if(true == ${bidInfo.get("black")})
+            <div class="pt-btn-f">
+            #else
+            <div class="pt-btn-f onshow">
+            #end
+                <button class="shield">屏蔽</button>
+                #if("竞拍中" == ${bidInfo.get("status")})
+                <button class="accept">接受</button>
+                #end
+            </div>
         </div>
     </div>
     #end

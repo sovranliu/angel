@@ -17,12 +17,12 @@
 </head>
 <body>
 <header class="amf-header">
-    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <a href="/mp/user/stage" class="home"></a>
     <span>消息列表</span>
 </header>
 <div class="amf-content">
     #foreach($message in $messages)
-    <a class="msg-list" data-url="${message.c("getURL")}" data-read="0" data-id="">
+    <a class="msg-list" data-url="${message.c("getURL")}" data-read="0" data-id="${message.p("id")}">
         <div class="msg-img">
             <img src="#" data-src="/image/ring.png" alt="">
             #if(1 == ${message.p("status")})
@@ -31,9 +31,14 @@
         </div>
         <div class="msg-info">
             <h2>${message.c("getTitle")}</h2>
-            <p>${message.c("getDescription")}</p>
+            #if(${message.c("getDescription")} == "")
+                <p>点击查看详情</p>
+            #else
+                <p>${message.c("getDescription")}</p>
+            #end
+            
         </div>
-        <time>${message.p("addTime").toString("MM:dd HH:mm")}</time>
+        <time>${message.p("addTime").toString("MM-dd HH:mm")}</time>
     </a>
     #end
 </div>

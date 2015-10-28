@@ -40,7 +40,7 @@ else {
 }
 context.set("angelId", angel.p("id"));
 context.set("mockName", activity.p("mockName"));
-context.set("angelPhoto", angel.c("primaryPhoto"));
+context.set("angelPhoto", activity.c("primaryPhoto"));
 if(null == winner) {
     context.set("bidderId", 0);
     context.set("bidderNickName", "竞拍人");

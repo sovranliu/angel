@@ -217,6 +217,7 @@ public class ActivityDetail extends Activity {
     /**
      * 慈善捐赠比例：0-100
      */
+    @Property
     public int donate;
     /**
      * 活动状态，1：审核中，2：发布，3：确立，4：成交，5：取消
@@ -406,7 +407,7 @@ public class ActivityDetail extends Activity {
             logger.warn("activity deal faild, no angel\nactivityId = " + id);
             return false;
         }
-        int fee = Pay.getPayAmount((Integer) bid.property("amount"));
+        int fee = Pay.getPayAmount((Integer) bid.property("amount"), donate);
         String sql = "UPDATE A_Activity SET Status = " + STATUS_DEAL + " WHERE Status = " + STATUS_PAY + " AND ID = " + id;
         int result = DB.executor().alter(sql);
         if(1 == result) {

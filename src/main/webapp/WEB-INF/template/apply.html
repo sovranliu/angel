@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>参与竞拍</title>
+    <title>女神的晚餐</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
     <link rel="stylesheet" rev="stylesheet" href="/css/upload.css" type="text/css">
@@ -18,30 +18,30 @@
     <meta name="x5-page-mode" content="app">
 </head>
 <body data-page="JPpage">
-<header class="amf-header">
-    <a href="javascript:;" class="back">返回</a>
-    <span>参与竞拍</span>
-</header>
 <div class="amf-content">
     <p class="confirm">请确认活动信息：</p>
     <ul class="active-block">
         <li><label>活动名称：</label>${title}</li>
         <li><label>活动区域：</label>${region}</li>
         <li><label>活动时间：</label>${startTime}</li>
-        <li><label>活动底价：</label>${basicPrice} 元</li>
-        <li><label>当前竞价：</label><em>${currentPrice}</em> 元</li>
+        #set($amount1 = ${basicPrice} / 100)
+        #set($amount2 = ${currentPrice} / 100)
+        <li><label>活动底价：</label>$amount1 元</li>
+        <li><label>当前竞价：</label><em>$amount2</em> 元</li>
     </ul>
     <p class="confirm">请您提供您的竞拍信息：</p>
     <section id="start" class="form-activity">
         <div class="form-item">
             <label>竞拍价格：</label>
-            <input type="text" id="jpmoney" placeholder="请输入您的活动金额" value="${amount}" />
+            #set($amount100 = ${amount} / 100)
+            <input type="text" id="jpmoney" placeholder="请输入您的活动金额" value="$amount100" />
         </div>
         <div class="form-item" style="height:60px">
             <label>截止时间：</label>
             <input id="jptime" type="datetime-local" value="${expireTime}" />
             <span class="hasmsg"><i class="tips">i</i> 请选择申请有效期,超过该时间视为自动放弃申请</span>
         </div>
+        #if(true == ${needPhoto})
         <div class="form-item selectimg" style="height:92px;">
             <label>选择图片：</label>
             <form class="fx-form">
@@ -64,12 +64,11 @@
             <img class="photos" src="" data-src="$photo" data-index="$velocityCount">
             #end
         </div>
+        #end
         <button class="btn act" id="act-submit">确 认</button>
     </section>
 </div>
-<footer class="amf-footer">
-</footer>
-<div class="view cui-layer">
+<div id="commonLayer" class="view cui-layer">
     <div class="cui-pop-box">
         <div class="cui-hd">
             <div class="cui-text-center">信息确认</div>
@@ -78,14 +77,7 @@
         </div>
         <div class="cui-bd cui-roller-bd">
             <ul class="cui-select-view">
-                <li>
-                    <label>我的出价：</label><span id="act-money"></span>
-                </li>
-                <li>
-                    <label>截止时间：</label><span id="act-date"></span>
-                </li>
             </ul>
-            <a id="confirm-submit-2" class="confirm-btn">确定</a>
         </div>
     </div>
 </div>
