@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <title>女神的晚餐</title>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="description" content="女神的晚餐">
+	    <meta name="keywords" content="女神">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="applicable-device" content="mobile">
+	    <meta content="yes" name="apple-touch-fullscreen">
+	    <meta name="x5-orientation" content="portrait">
+	    <meta name="x5-fullscreen" content="true">
+	    <meta name="x5-page-mode" content="app">
+    </head>
+<body>
+<div id="pageContain" style="height: 1739px;">
+	<div class="page page1 current">
+		<div class="contain">
+		</div>
+	</div>
+
+	<div class="page page2">
+		<div class="contain">
+		</div>
+	</div>
+
+	<div class="page page3">
+		<div class="contain">
+		</div>
+	</div>
+
+	<div class="page page4">
+		<div class="contain">
+			<a class="loadbtn" href="/mp/user/stage">立即体验</a>
+		</div>
+	</div>
+</div>
+
+<ul id="navBar">
+	<li data-page="0"></li>
+	<li data-page="1"></li>
+	<li data-page="2"></li>
+	<li data-page="3"></li>
+</ul>
+<script src="/js/jquery2.0.3.js"></script>
+<script src="/js/fullPage.min.js"></script>
+<script>
+$(function(){
+	var runPage;
+	runPage = new FullPage({
+		id: 'pageContain',
+		slideTime: 800,
+		effect: {
+			transform: {
+				translate: 'X',
+				scale: [1, 1],
+				rotate: [0, 0]
+			},
+			opacity: [0, 1]
+		},
+		mode: 'wheel,touch,nav:navBar',
+		easing: 'ease'
+	});
+})
+</script>
+</body>
+
+</html>
