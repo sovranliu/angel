@@ -37,6 +37,7 @@
 }
 .up-img-box {
     padding-top: 15px;
+    overflow-x:hidden; 
 }
 .up-img-box:after{
     content: "";
@@ -60,15 +61,15 @@
 .up-img-box .delete{
     display: block;
     position: absolute;
-    right: -4px;
-    top: -5px;
+    right: -7px;
+    top: -7px;
     z-index: 999;
     background: rgba(0,0,0,0.7);
     color: #fff;
-    width: 15px;
-    height: 15px;
-    line-height: 15px;
-    border-radius: 15px;
+    width: 20px;
+    height: 20px;
+    line-height: 19px;
+    border-radius: 20px;
     text-align: center;
 }
 .up-img-box .up-img img {

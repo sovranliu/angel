@@ -67,7 +67,7 @@
     </nav>
 </div>
 
-<div class="amf-content">
+<div class="amf-content" style="background:transparent">
     #foreach($activity in $activities)
     <a href="activity?id=${activity.id()}" class="amf-list">
         <h4>${activity.title()}</h4>
@@ -124,9 +124,8 @@ ${activity.career()}
             </div>
         </div>
     </a>
-
-    <div class="line-depart"></div>
     #end
+    <div class="morelink" style="display:none"><i></i>加载中</div>
 </div>
 <div class="bg-wrap"></div>
 <div class="bg-mast"></div>
@@ -144,6 +143,9 @@ ${activity.career()}
             swipe:true
         });
         new angel.LazyLoadImg({});
+        new angel.LoadMorePage({
+            type:$type
+        });
         new angel.WXconfig({
         });
     })

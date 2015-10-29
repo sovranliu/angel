@@ -2,7 +2,7 @@
 
 var city = context.cookie.get("city");
 if(null == city || "" == city) {
-    return "city.url";
+    return "activities.html";
 }
 var cityId = eval("(" + city.trim() + ")").id;
 var cityName = eval("(" + city.trim() + ")").name;
@@ -25,9 +25,17 @@ else {
     type = parseInt(type);
 }
 context.set("type", type);
+var page = context.parameters.get("page");
+if(null == page || "" == page) {
+    page = 0;
+}
+else {
+    page = parseInt(page) - 1;
+    if(page < 0) {
+        page = 0;
+    }
+}
 var size = 10;
-var ads = $$("Ad", "");
-context.set("ads", ads);
 var stage = $("Stage", "");
-context.set("activities", stage.c("search", cityId, type, 0, size));
-return "stage.html";
+context.set("activities", stage.c("search", cityId, type, page * size, size));
+return "activities.html";

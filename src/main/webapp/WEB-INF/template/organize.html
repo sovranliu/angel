@@ -19,7 +19,7 @@
 </head>
 <body>
 <header class="amf-header">
-    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <a href="/mp/user/stage" class="back">首页</a>
     <span>发起活动</span>
 </header>
 <div class="amf-content">
@@ -28,7 +28,7 @@
         <div class="form-item">
             <i class="need">* </i>
             <label>活动城市：</label>
-            <div id="actcity" class="actcity" data-code=""></div>
+            <div id="actcity" class="actcity" data-code="${cityId}">${cityName}</div>
         </div>
         <div class="form-item">
             <i class="need">* </i>
@@ -42,37 +42,30 @@
         <div class="form-item">
             <i class="need">* </i>
             <label>活动名称：</label>
-            <input id="actname" type="text" placeholder="给你的活动起个名字吧">
+            <input id="actname" type="text" placeholder="给你的活动起个名字吧" maxlength="12">
         </div>
         <div class="form-item">
             <i class="need">* </i>
             <label>活动区域：</label>
-            <input id="actarea" type="text" placeholder="活动大致区域">
+            <input id="actarea" type="text" placeholder="活动大致区域，如：陆家嘴">
         </div>
         <div class="form-item">
             <label>活动地址：</label>
-            <input id="actaddress" type="text" placeholder="活动详细地址，如：江桥万达电影院">
+            <input id="actaddress" type="text" placeholder="活动详细地址，仅支付后可见">
         </div>
         <div class="form-item" style="height:60px">
             <!-- 请选择预选结束时间 -->
             <i class="need">* </i>
             <label>竞拍截止时间：</label>
-            <input id="acttime1" type="button" placeholder="活动时间距今天不得超过7天">
-            <span class="hasmsg"><i class="tips">i</i> 此日期后将无法进行竞拍</span>
-        </div>
-        <div class="form-item" style="height:60px">
-            <!-- 请选择甄选结束时间 -->
-            <i class="need">* </i>
-            <label>遴选截止时间：</label>
-            <input  id="acttime2" type="button" placeholder="活动时间距今天不得超过7天">
-            <span class="hasmsg"><i class="tips">i</i> 公布最终竞拍成功者的时间</span>
+            <input id="acttime1" placeholder="活动时间距今天不得超过7天">
+            <span class="hasmsg"><i class="tips">i</i> 停止参与竞拍的时间</span>
         </div>
         <div class="form-item" style="height:60px">
             <!-- 请选择活动时间 -->
             <i class="need">* </i>
             <label>活动时间：</label>
-            <input id="actdate" type="button" placeholder="活动时间距今天不得超过7天">
-            <span class="hasmsg"><i class="tips">i</i> 本次活动的确切时间</span>
+            <input id="actdate" placeholder="活动时间距今天不得超过7天">
+            <span class="hasmsg"><i class="tips">i</i> 本次活动的时间</span>
         </div>
         <div class="form-item">
             <i class="need">* </i>
@@ -85,11 +78,11 @@
             <select name="" id="cishan">
                 <option value="0">0%</option>
                 <option value="1">1%</option>
-                <option value="2">5%</option>
-                <option value="3">10%</option>
-                <option value="4">20%</option>
-                <option value="5">50%</option>
-                <option value="6">100%</option>
+                <option value="5">5%</option>
+                <option value="10">10%</option>
+                <option value="20">20%</option>
+                <option value="50">50%</option>
+                <option value="100">100%</option>
             </select>
             <span class="hasmsg"><i class="tips">i</i> 本次活动所得将按百分比捐给慈善机构</span>
         </div>
@@ -137,7 +130,7 @@
             <label>我的职业：</label>
             <input id="career" type="text" placeholder="请输入您的职业" value="${user.p("career")}" />
         </div>
-        <div class="form-item selectimg" style="height:92px;">
+        <div class="form-item selectimg">
             <i class="need">* </i>
             <label>选择活动图片：</label>
             <form class="fx-form">
@@ -151,7 +144,7 @@
         </div>
         <div class="form-item nob-b" style="padding-left:0">
             #foreach($photo in ${user.c("photoList")})
-            <img class="photos" src="" data-src="$photo" data-index="$velocityCount">
+            <img class="photos" src="$photo" data-index="$velocityCount">
             #end
         </div>
         <button class="btn act"  id="act-submit">确 认</button>
@@ -185,7 +178,6 @@
         new angel.Index({
             "getCity":true,
         });
-        new angel.LazyLoadImg({});
         new uploadImg.UploadPage({
             "uploadUrl":'/mp/user/upload'
         })

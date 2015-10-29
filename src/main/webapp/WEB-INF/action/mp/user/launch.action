@@ -34,12 +34,6 @@ if(null == prepareTime) {
     context.set("msg", "请设置竟拍截止时间");
     return "error.json";
 }
-var auctionTime = parseDateTime(context.parameters.get("auctiontime"));
-if(null == auctionTime) {
-    context.set("code", -5);
-    context.set("msg", "请设置遴选截止时间");
-    return "error.json";
-}
 var startTime = parseDateTime(context.parameters.get("starttime"));
 if(null == startTime) {
     context.set("code", -6);
@@ -100,9 +94,9 @@ if(null == donate || "" == donate) {
 donate = parseInt(donate);
 //
 var user = context.get("User");
-var result = user.c("launch", type, title, mockName, photosString, prepareTime, auctionTime, startTime, cityId, region, address, content, rules, needPhoto, memo, basicPrice * 100, donate);
+var result = user.c("launch", type, title, mockName, photosString, prepareTime, startTime, cityId, region, address, content, rules, needPhoto, memo, basicPrice * 100, donate);
 if(-2 == result) {
-    context.set("msg", "请检查时间设置");
+    context.set("msg", "注意时间设置，活动开始时间需要在一周内");
     context.set("code", -15);
     return "error.json";
 }

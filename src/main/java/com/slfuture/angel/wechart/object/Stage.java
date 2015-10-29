@@ -35,7 +35,7 @@ public class Stage {
                     int cityId = record.getInteger("CityID", 0);
                     int type = record.getInteger("Type", 0);
                     //
-                    sql = "SELECT A.ID, A.Title, A.Photos, A.Content, A.StartTime, A.Region, U.Career, IFNULL(UC.UserCount, 0) AS BidderCount FROM A_Activity A JOIN A_User U  ON A.AngelID = U.ID LEFT JOIN (SELECT ActivityID, COUNT(UserID) As UserCount FROM A_Bid WHERE Status = 1 AND ExpireTime > NOW() GROUP BY ActivityID) UC ON A.ID = UC.ActivityID WHERE A.Type = " + type + " AND A.CityID = " + cityId + " AND A.Status = 4 AND A.PrepareTime > NOW() LIMIT 10000";
+                    sql = "SELECT A.ID, A.Title, A.Photos, A.Content, A.StartTime, A.Region, U.Career, IFNULL(UC.UserCount, 0) AS BidderCount FROM A_Activity A JOIN A_User U  ON A.AngelID = U.ID LEFT JOIN (SELECT ActivityID, COUNT(UserID) As UserCount FROM A_Bid WHERE Status IN (1, 3, 4, 6) AND (ExpireTime IS NULL OR ExpireTime > NOW()) GROUP BY ActivityID) UC ON A.ID = UC.ActivityID WHERE A.Type = " + type + " AND A.CityID = " + cityId + " AND A.Status = 4 AND A.PrepareTime > NOW() ORDER BY A.ID DESC LIMIT 10000";
                     ICollection<Record> snapshotRecordSet = DB.executor().select(sql);
                     int size = snapshotRecordSet.size();
                     ActivitySnapshot[] snapshots = new ActivitySnapshot[size];
@@ -138,8 +138,8 @@ public class Stage {
         if(null == snapshots || 0 == snapshots.length) {
             return new ActivitySnapshot[0];
         }
-        if(index > snapshots.length) {
-            index = 0;
+        if(index >= snapshots.length) {
+            return new ActivitySnapshot[0];
         }
         for(int i = 0; i < size && index < snapshots.length; i++) {
             list.add(snapshots[index++]);

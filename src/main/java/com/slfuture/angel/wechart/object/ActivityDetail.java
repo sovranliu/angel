@@ -84,7 +84,7 @@ public class ActivityDetail extends Activity {
          */
         @Override
         public Object onMiss(String key) {
-            String sql = "SELECT A.ID, Type, AngelID, A.MockName, BidID, Title, A.Photos, PrepareTime, AuctionTime, StartTime, CityID, Region, Career, IFNULL(B.UserCount, 0) AS Popularity, Address, Content, Rules, NeedPhoto, Memo, BasicPrice, A.Status FROM A_Activity A JOIN A_User U ON A.AngelID = U.ID LEFT JOIN (SELECT ActivityID, COUNT(UserID) As UserCount FROM A_Bid WHERE Status = 1 AND ExpireTime > NOW() GROUP BY ActivityID) B ON A.ID = B.ActivityID WHERE A.ID = " + key;
+            String sql = "SELECT A.ID, Type, AngelID, A.MockName, BidID, Title, A.Photos, PrepareTime, StartTime, CityID, Region, Career, IFNULL(B.UserCount, 0) AS Popularity, Address, Content, Rules, NeedPhoto, Memo, BasicPrice, A.Status FROM A_Activity A JOIN A_User U ON A.AngelID = U.ID LEFT JOIN (SELECT ActivityID, COUNT(UserID) As UserCount FROM A_Bid WHERE Status = 1 AND ExpireTime > NOW() GROUP BY ActivityID) B ON A.ID = B.ActivityID WHERE A.ID = " + key;
             ICollection<Record> records = DB.executor().select(sql);
             for(Record record : records) {
                 ActivityDetail detail = null;
@@ -179,11 +179,6 @@ public class ActivityDetail extends Activity {
      */
     @Property
     public DateTime prepareTime;
-    /**
-     * 竞拍结束时间
-     */
-    @Property
-    public DateTime auctionTime;
     /**
      * 流行度
      */

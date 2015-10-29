@@ -45,9 +45,9 @@ function Swipe(container, options) {
 
     //special case if two slides
     if (browser.transitions && options.continuous && slides.length < 3) {
-      element.appendChild(slides[0].cloneNode(true));
-      element.appendChild(element.children[1].cloneNode(true));
-      slides = element.children;
+      // element.appendChild(slides[0].cloneNode(true));
+      // element.appendChild(element.children[1].cloneNode(true));
+      // slides = element.children;
     }
 
     // create an array to store current positions of each slide

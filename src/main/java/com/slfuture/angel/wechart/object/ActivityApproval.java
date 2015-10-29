@@ -16,13 +16,7 @@ public class ActivityApproval extends Activity {
      * 活动竞拍截止时间
      */
     @Property
-
     public DateTime prepareTime;
-    /**
-     * 筛选截止时间
-     */
-    @Property
-    public DateTime auctionTime;
     /**
      * 活动详细地址
      */
@@ -120,10 +114,6 @@ public class ActivityApproval extends Activity {
         return prepareTime;
     }
 
-    public DateTime auctionTime() {
-        return auctionTime;
-    }
-
     public String address() {
         return address;
     }
@@ -183,7 +173,7 @@ public class ActivityApproval extends Activity {
      * @return 对象
      */
     public static ActivityApproval find(Condition condition) {
-        String sql = "SELECT A.*, U.*,  A.ID AS ID, U.ID AS AngelID  FROM A_Activity A JOIN A_User U ON A.AngelID = U.ID WHERE A.Status = 1 ORDER BY A.ID ASC LIMIT 1";
+        String sql = "SELECT A.*, U.*,  A.ID AS ID, U.ID AS AngelID, A.Photos AS Photos FROM A_Activity A JOIN A_User U ON A.AngelID = U.ID WHERE A.Status = 1 ORDER BY A.ID ASC LIMIT 1";
         Record record = DB.executor().load(sql);
         if(null == record) {
             return null;

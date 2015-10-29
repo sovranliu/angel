@@ -25,7 +25,7 @@ for(var i = 0; i < bids.length; i++) {
     if(1 == bid.p("status")) {
         if(4 == activity.p("status")) {
             var expireTime = bid.p("expireTime");
-            if(activity.p("auctionTime").compareTo(com.slfuture.carrie.base.time.DateTime.now()) > 0 && (null == expireTime || expireTime.compareTo(com.slfuture.carrie.base.time.DateTime.now()) > 0)) {
+            if(activity.p("startTime").compareTo(com.slfuture.carrie.base.time.DateTime.now()) > 0 && (null == expireTime || expireTime.compareTo(com.slfuture.carrie.base.time.DateTime.now()) > 0)) {
                 record.put("status", "竞拍中");
                 result2.add(record);
             }

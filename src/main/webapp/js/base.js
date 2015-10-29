@@ -18,7 +18,8 @@ var angel = {};
         this.activity = op.activity;
         this.bid_id = op.bid_id;
         this.isMsg = op.isMsg;
-        this.lock = op.lock;
+        this.swipe = op.swipe;
+        this.qrcode = op.qrcode;
         this.dom = {};
         this.dom.menu = $("#selectMenu");
         this.dom.user = $("#mine");
@@ -38,24 +39,38 @@ var angel = {};
                     $('.pay').removeClass('puttop');
                 }
             });
+            if(self.swipe){
+                self.sliderImg();
+            }
             $('.msg-dot').hide();
             $('.msgnub').hide();
             if(self.circle) {
                 self.Circle();
+                self.openUserMenu();
             }
             if(self.isCookie) {
                 self.showCity();
-                self.searchCity();
+                self.searchCity(forselect);
             };
             if(self.actCookie) {
                 self.historyCity();
-                self.searchCity();
+                self.searchCity(citylist);
                 self.actSelectCity();
             };
+            if(self.qrcode){
+                $('#btnQucode').click(function (){
+                    self.getQrcode();
+                })
+            }
             if(self.getCity) {
                 self.getCityName();
+                $('#actdate').date({theme:"datetime"});
+                $('#acttime1').date({theme:"datetime"});
+                $('#acttime2').date({theme:"datetime"});
+                $('#jptime').date({theme:"datetime"});
             }
             if(self.isMsg) {
+                self.getMessage();
                 setInterval(self.getMessage,10000);
             }
             if(self.isPhoto) {
@@ -67,8 +82,19 @@ var angel = {};
             $('.dmoney').blur(function() {
                 self.regMoney();
             })
+            $('#actarea').blur(function(){
+                var c = $.trim($(this).val());
+                if(c != ''){
+                    $('#actaddress').val(c);
+                }
+            })
             $('#act-submit').click(function() {
-                self.openDialog();
+                var pageType = $('body').data('page');
+                if(pageType == 'JPpage'){
+                    self.setJPDialog();//竞拍弹层
+                }else{
+                    self.setDialog();//发起活动弹层
+                }
             })
             $('#cancel-pay').click(function() {
                 var r = confirm('放弃本次支付，将被扣取一定的信誉积分');
@@ -82,8 +108,7 @@ var angel = {};
             self.partakeList();
             self.selectMenu();
             self.sortMenu();
-            self.openUserMenu();
-            self.sliderImg();
+            
             self.aucTab();
 
             $('.actcity').click(function() {
@@ -230,9 +255,8 @@ var angel = {};
                 },  //回调函数，切换时触发
                 transitionEnd: function(index, element) {}  //回调函数，切换结束调用该函数
             });
-            var boxWidth = window.screen.width,
-                boxHeight = window.screen.height,
-                img = $('.wrap img');
+            var boxWidth = document.body.offsetWidth,
+                img = $('.act-wrap img');
             img.each(function() {
                 var rimg = $(this);
                 $("<img/>").attr("src", $(rimg).attr("src")).load(function() {
@@ -318,7 +342,7 @@ var angel = {};
                 $('.current-city').hide();
             }
         },
-        searchCity:function() {
+        searchCity:function(id) {
             $('#putin').keyup(function() {
                 var content = $(this).val();
                 $.ajax({
@@ -328,12 +352,12 @@ var angel = {};
                     success: function(d) {
                         if(d.code >= 0) {
                             var html = '';
-                            $('#forselect').html('');
+                            $(id).html('');
                             for(var i = 0;i < d.data.length;i++) {
                                 html += '<li class="row"  data-code="'+ d.data[i].id;
                                 html += '">'+ d.data[i].name +'</li>';
                             }
-                            $('#forselect').append(html);
+                            $(id).append(html);
                         }
                     }
                 });
@@ -415,48 +439,110 @@ var angel = {};
                 $('.auction-list').eq(index).show().siblings().hide();
             })
         },
-        openDialog:function() {
+        openDialog:function(title,msg) {
             var self = this;
-            var pageType = $('body').data('page');
-            var htmlHeight = $(document).height();
-            var dialogWidth= $('.cui-layer').width()/2;
-            var dialogHeight= $('.cui-layer').height()/2;
-            $('.cui-layer').css('margin-left',-dialogWidth+'px');
-            $('.cui-layer').css('margin-top',-dialogHeight+'px');
-            $('.bg-mast').css('height',htmlHeight+'px');
-            if(pageType == 'JPpage'){
-                self.setJPDialog();//竞拍弹层
-            }else{
-                self.setDialog();//发起活动弹层
-            }
-            $('.cui-layer').show();
+            $('#commonLayer').find('.cui-text-center').html(title);
+            $('#commonLayer').find('.cui-select-view').html(msg);
+            var htmlHeight = $(window).height();
+            var height = $(document).height();
+            var dialogWidth= $('#commonLayer').width()/2;
+            var dialogHeight= $('#commonLayer').height()/2;
+            $('.bg-mast').css('height',height+'px');
             $('.bg-mast').show();
+            $('#commonLayer').css('margin-left',-dialogWidth+'px');
+            $('#commonLayer').css('margin-top',-dialogHeight+'px');
+            $('#commonLayer').show();
             $('.cui-top-close').click(function() {
-                $('.cui-layer').hide();
+                self.ajaxlock = true;
+                if($('.confirm-btn').length > 0){
+                    $('.confirm-btn').remove();
+                }
+                $('#commonLayer').hide();
                 $('.bg-mast').hide();
             })
         },
-        setDialog:function() {
+        openQrcodeDialog:function () {
             var self = this;
-            var m = $('.dmoney').val();
-            var c = $('#cishan').find("option:selected").text();
-            var d = $('#actdate').val();
-            $('#act-money').html(m);
-            $('#act-cishan').html(c);
-            $('#act-date').html(d);
-            $('#confirm-submit').click(function() {
+            var htmlHeight = $(window).height();
+            var height = $(document).height();
+            var dialogWidth= $('#QrcodeLayer').width()/2;
+            var dialogHeight= $('#QrcodeLayer').height()/2;
+            $('.bg-mast').css('height',height+'px');
+            $('.bg-mast').show();
+            $('#QrcodeLayer').css('margin-left',-dialogWidth+'px');
+            $('#QrcodeLayer').css('margin-top',-dialogHeight+'px');
+            $('#QrcodeLayer').show();
+            $('.cui-top-close').click(function() {
+                $('#QrcodeLayer').hide();
+                $('#code').html('');
+                $('.bg-mast').hide();
+            })
+        },
+        getQrcode:function (){
+            var self = this;
+            var id = parseInt(self.activity);
+            var str = 'http://www.angeldinner.com/mp/user/deal?activity=' + id;
+            $("#code").qrcode({
+                render: "table",
+                width: 200,
+                height:200,
+                text: str
+            });
+            self.openQrcodeDialog();
+        },
+        setDialog:function() {
+            var self = this,
+                a = $('#actcity').attr('data-code'),
+                b = $('#actname').val(),
+                c = $('#actarea').val(),
+                d = $('#acttime1').val(),
+                e = $('#acttime2').val(),
+                f = $('#actdate').val(),
+                g = $('#actmoney').val(),
+                h = $('#huodong').val(),
+                i = $('#nickname').val(),
+                j = $('#realname').val(),
+                k = $('.up-img').attr('data-url');
+            var cishan = $('#cishan').find("option:selected").val();
+            var html = '';
+            if(!self.checkEmpty(a,'城市') ||!self.checkEmpty(b,'活动名称') || !self.checkEmpty(c,'活动区域') || !self.checkEmpty(j,'真实信息') ){
+                return false;
+            }
+            if(!self.checkEmpty(d,'竞拍截止时间') ||!self.checkEmpty(e,'遴选截止时间') || !self.checkEmpty(f,'活动截止时间')){
+                return false;
+            }
+            if(!self.checkEmpty(g,'活动金额') ||!self.checkEmpty(h,'活动内容') || !self.checkEmpty(i,'昵称') || !self.checkEmpty(k,'活动图片')){
+                return false;
+            }
+            html = '<li><label>活动时间：</label><span id="act-date">'+ f +'</span></li>';
+            html += '<li><label>起拍价：</label><span id="act-money">'+ g +'</span>元</li>';
+            html += '<li><label>慈善比例：</label><span id="act-cishan">'+ cishan +'</span></li>';
+            html += '<a id="confirm-submit" class="confirm-btn">确定</a>';
+            self.openDialog('信息确认',html);
+            $('.cui-layer').on('click','#confirm-submit',function() {
                 if(self.ajaxlock){
                     self.submitAct();
                 }
             })
         },
         setJPDialog:function() {
-            var self = this;
+            var self = this,
+                html = '';
             var m = $('#jpmoney').val();
             var d = $('#jptime').val();
-            $('#act-money').html(m);
-            $('#act-date').html(d);
-            $('#confirm-submit-2').click(function() {
+            var k = $('.up-img').attr('data-url');
+            if(!self.checkEmpty(m,'竞拍价格')){
+                return false;
+            }
+            if($('.selectimg').length > 0){
+                if(!self.checkEmpty(k,'活动图片')) {
+                    return false;
+               }
+            }
+            html += '<li><label>我的出价：</label><span id="act-money">'+ m +'</span> 元</li>';
+            html += '<a id="confirm-submit-2" class="confirm-btn">确定</a>';
+            self.openDialog('信息确认',html);
+            $('.cui-layer').on('click','#confirm-submit-2',function() {
                 if(self.ajaxlock){
                     self.submitJP();
                 }
@@ -465,64 +551,68 @@ var angel = {};
         submitAct:function() {
             var self = this;
             self.ajaxlock = false;
-            var actname = $('#actname').val(),
-                realname = $('#realname').val(),
-                actcity = $('#actcity').attr('data-code'),
-                actarea = $('#actarea').val(),
-                actaddress = $('#actaddress').val(),
-                acttime1 = $('#acttime1').val(),
-                acttime2 = $('#acttime2').val(),
-                actdate = $('#actdate').val(),
-                actmoney = $('#actmoney').val(),
-                cishan = $('#cishan').find("option:selected").val(),
-                huodong = $('#huodong').val(),
+            var actaddress = $('#actaddress').val(),
                 requirement = $('#requirement').val(),
-                nickname = $('#nickname').val(),
                 career = $('#career').val(),
                 beizhu = $('#beizhu').val(),
                 needphoto = $('#actneed').find("option:selected").val(),
                 acttype = $('#acttype').find("option:selected").val(),
+                cishan = $('#cishan').find("option:selected").val(),
+                a = $('#actcity').attr('data-code'),
+                b = $('#actname').val(),
+                c = $('#actarea').val(),
+                d = $('#acttime1').val(),
+                e = $('#acttime2').val(),
+                f = $('#actdate').val(),
+                g = $('#actmoney').val(),
+                h = $('#huodong').val(),
+                i = $('#nickname').val(),
+                j = $('#realname').val(),
                 photos = '';
-                var i = 0;
+                actaddress = actaddress ? actaddress : '';
+                requirement = requirement ? requirement : '';
+                career = career ? career : '';
+                beizhu = beizhu ? beizhu : '';
+                beizhu = beizhu ? beizhu : '';
+                var z = 0;
                 $('.up-img').each(function() {
-                    if(0 == i) {
+                    if(0 == z) {
                         photos = $(this).data('url');
                     }
                     else {
                         photos += ',' + $(this).data('url');
                     }
-                    i++;
+                    z++;
                 })
             $.ajax({
                 type:'post',
                 url:'/mp/user/launch',
                 data:{
-                    title:actname,
-                    name:realname,
-                    cityid:actcity,
+                    title:b,
+                    name:j,
+                    cityid:a,
                     type:acttype,
-                    region:actarea,
+                    region:c,
                     address:actaddress,
-                    preparetime:acttime1,
-                    auctiontime:acttime2,
-                    starttime:actdate,
-                    basicprice:actmoney,
+                    preparetime:d,
+                    auctiontime:e,
+                    starttime:f,
+                    basicprice:g,
                     donate:cishan,
-                    content:huodong,
+                    content:h,
                     rules:requirement,
-                    nickname:nickname,
+                    mockname:i,
                     career:career,
                     memo:beizhu,
                     needphoto:needphoto,
-                    photos:photos,
-                    lock:this.lock
+                    photos:photos
                 },
                 dataType:'json',
                 success:function(d) {
                     if(d.code < 0) {
                         alert(d.msg);
                     }else{
-                        alert('提交成功，请等待审核...');
+                        alert('提交成功，请稍后查看哦...');
                         window.location.href = '/mp/user/myactivity';
                     }
                     self.ajaxlock = true;
@@ -535,6 +625,8 @@ var angel = {};
                 jpdate = $('#jptime').val(),
                 jpmoney = $('#jpmoney').val(),
                 photo = $('.up-img').attr('data-url');
+                jpdate = jpdate ? jpdate : '';
+                photo = photo ? photo : '';
                 self.ajaxlock = false;
             $.ajax({
                 type:'post',
@@ -550,8 +642,8 @@ var angel = {};
                     if(d.code < 0) {
                         alert(d.msg);
                     }else{
-                        alert('提交成功，请等待审核...');
-                        window.location.href = '/mp/user/myactivity';
+                        alert('提交成功，请稍后查看哦...');
+                        window.location.href = '/mp/user/mybid';
                     }
                     self.ajaxlock = true;
                 }
@@ -601,8 +693,8 @@ var angel = {};
                     dataType:'json',
                     success:function(d) {
                         if(d.code >= 0) {
-                            mythis.parent('.pt-btn-f').hide();
-                            mythis.parent().siblings('.ptname').find('.accepted').show();
+                            mythis.hide();
+                            //mythis.parent().siblings('.ptname').find('.accepted').show();
                         }
                         else{
                             if(d.msg != '') {
@@ -688,10 +780,14 @@ var angel = {};
             });
             //竞拍者违约-竞拍人已付款
             $('#interrupt-apply').click(function() {
-                self.openDialog();
+                var html = '';
+                html += '<p class="title">请输入放弃原因：</p><textarea id="giveup-date-input" type="text"></textarea><span class="error">不能为空</span>';
+                html += '<p class="tipmsg">放弃会扣取您大量信誉值，竞拍者会收到完整退款</p>';
+                html += '<button id="confirm-interrupt-apply" class="confirm-btn">确定</button>';
+                self.openDialog('违约信息',html);
             });
             //竞拍人填写违约理由
-            $('#confirm-interrupt-apply').click(function() {
+            $('.cui-select-view').on('click','#confirm-interrupt-apply',function() {
                 var val = '';
                 if(self.regEmpty('#giveup-date-input')){
                     val = $('#giveup-date-input').val();
@@ -727,10 +823,14 @@ var angel = {};
             });
             //发起者违约-竞拍人已付款
             $('#interrupt-activity').click(function() {
-                self.openDialog();
+                var html = '';
+                html += '<p class="title">请输入放弃原因：</p><textarea id="giveup-date-input" type="text"></textarea><span class="error">不能为空</span>';
+                html += '<p class="tipmsg">放弃会扣取您大量信誉值，竞拍者会收到完整退款</p>';
+                html += '<button id="confirm-interrupt-activity" class="confirm-btn">确定</button>';
+                self.openDialog('违约信息',html);
             });
             //发起人填写违约理由
-            $('#confirm-interrupt-activity').click(function() {
+            $('.cui-select-view').on('click','#confirm-interrupt-activity',function() {
                 var val = '';
                 if(self.regEmpty('#giveup-date-input')){
                     val = $('#giveup-date-input').val();
@@ -794,6 +894,19 @@ var angel = {};
                     }
                 }
             })
+        },
+        checkEmpty:function(val,msg){
+            var self = this,
+                html = '';
+                val = $.trim(val);
+            if("" == val || null == val || undefined == val){
+                html = '<li>请填写'+ msg +'信息</li>';
+                self.openDialog('提示',html);
+                return false;
+            }
+            else{
+                return true;
+            }
         }
     };
     Angel.LazyLoadImg = function(opt) {
@@ -916,6 +1029,63 @@ var angel = {};
             }
         }
     };
+    Angel.LoadMorePage = function(opt) {
+        this.page = 2;
+        this.morelink = $(".morelink");
+        this.ajaxLock = true;
+        this.type = opt.type;
+        this.init();
+    };
+    Angel.LoadMorePage.prototype = {
+        constructor: Angel.LoadMorePage,
+        init: function() {
+            $(window).scroll($.proxy(this.scroll, this));
+        },
+        scroll: function() {
+            var _this = this, 
+                scrollTop = $(window).scrollTop(),
+                wHeight = $(window).height(),
+                bodyHeight = $(document).height();
+                if (_this.ajaxLock && bodyHeight - scrollTop - wHeight < 40 ) {
+                    _this.ajaxLock = false;
+                    _this.morelink.show();
+                    _this.loadMoreact();
+                }
+            },
+
+        loadMoreact: function() {
+            var _this=this,
+            ajax_data = {
+                page: _this.page,
+                type:_this.type
+            };
+            $.ajax({
+                url: '/mp/user/loadactivity',
+                type: 'get',
+                dataType: 'text',
+                data: ajax_data,
+                success: function(data) {
+                    if(data.indexOf("a") == -1){
+                        _this.morelink.hide();
+                        _this.ajaxLock = false;
+                    }else{
+                        _this.ajaxLock = true;
+                        _this.renderAct(data,_this.page);
+                    }
+                },
+                error: function() {
+                    _this.morelink.hide();
+                }
+            });     
+        },
+        renderAct: function(data,page){
+            console.log(page);
+            var _this = this;
+            _this.morelink.hide();
+            _this.page = page + 1;
+            $('.amf-content').append(data);
+        } 
+    };
     Angel.Chart = function(op) { 
         this.activity = $('#chat-messages').data('activity');
         this.chart_id = 0;
@@ -927,7 +1097,7 @@ var angel = {};
             var self = this,
                 height = $('#chat-messages').height();
             $(window).scrollTop(height);
-            setTimeout(function() {
+            setInterval(function() {
                 self.getHistory();
             },2000);
             document.onkeydown = function(e) { 
@@ -970,6 +1140,9 @@ var angel = {};
                 html = '',
                 height = $('#chat-messages').height();
             $(window).scrollTop(height);
+            if($.trim(content) == ''){
+                return false;
+            }
             $.ajax({
                 type:'post',
                 url:'/mp/user/talk/push',
@@ -1001,38 +1174,68 @@ var angel = {};
                     html += '</div><span>' + data[i].time + '</span></div>';
                     $('#chat-messages').append(html);
                     this.chart_id = data[i].id;
+                    window.scrollTo(0,document.body.scrollHeight)
                 }
             }
         },
     };
     Angel.WXconfig = function(op) { 
+        this.ajaxlock = true;
         this.bid_id = op.bid_id;
         this.activity_id = op.activity_id;
-        this.appId = op.appId;
-        this.timestamp = op.timestamp;
-        this.nonceStr = op.nonceStr;
-        this.signature = op.signature;
         this.init();
     };
     Angel.WXconfig.prototype = {
         constructor: Angel.WXconfig,
         init:function() {
             var self = this;
-            self.WXinit();
-            $('#chooseWXPay').click(function() {
-                self.WXpay();
-            })
+            if(self.ajaxlock){
+                $('#chooseWXPay').click(function() {
+                    self.ajaxlock = false;
+                    self.getWXpath();
+                    self.WXpay();
+                })
+            }
             $('#scanQRCode1').click(function() {
+                self.getWXpath();
                 self.WXcode();
             })
         },
-        WXinit:function() {
+        getWXpath:function(){
+            var url = encodeURIComponent(window.location.href);
+            var self = this,
+                appId,
+                timestamp,
+                nonceStr,
+                signature;
+            $.ajax({
+                type:'post',
+                url:'/mp/user/preparewechart',
+                data:{
+                    url:url
+                },
+                dataType:'json',
+                success:function(d) {
+                    var data = eval(d.data);
+                    if(d.code >= 0) {
+                        appId = data.appId;
+                        timestamp = data.timestamp;
+                        nonceStr = data.nonceStr;
+                        signature = data.signature;
+                        self.WXConfig(appId,timestamp,nonceStr,signature);
+                    }else{
+                        alert('企鹅君不给力呀');
+                    }
+                }
+            });
+        },
+        WXConfig:function(appId,timestamp,nonceStr,signature){
             wx.config({
                 debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: this.appId, // 必填，公众号的唯一标识
-                timestamp: this.timestamp, // 必填，生成签名的时间戳
-                nonceStr: this.nonceStr, // 必填，生成签名的随机串
-                signature: this.signature,// 必填，签名，见附录1
+                appId: appId, // 必填，公众号的唯一标识
+                timestamp: timestamp, // 必填，生成签名的时间戳
+                nonceStr: nonceStr, // 必填，生成签名的随机串
+                signature: signature,// 必填，签名，见附录1
                 jsApiList: ['chooseWXPay','scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
         },
@@ -1056,11 +1259,9 @@ var angel = {};
                             paySign: data.paySign, // 支付签名
                             success: function (res) {
                                 // 支付成功后的回调函数
-                                alert('支付成功');
-                                window.location.href = '/mp/user/result?activity=' + this.activity_id;
+                                window.location.href = '/mp/user/activity?id='+ self.activity_id;
                             },
                             error: function() {
-                                alert('支付失败');
                             }
                         });
                     }
@@ -1076,17 +1277,19 @@ var angel = {};
                             window.location.href = d.redirect;
                         }
                     }
+                    self.ajaxlock = true;
+                },
+                error:function(){
+                    self.ajaxlock = true;
                 }
             })
         },
         WXcode:function() {
             wx.scanQRCode({                 
                 needResult: 0,
-                desc: 'scanQRCode desc',
                 scanType: ["qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                    window.location.href="";  
                 }
             });
         }

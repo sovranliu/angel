@@ -254,7 +254,6 @@ public class User implements Serializable {
      * @param mockName 本次活动的昵称
      * @param photos 照片集
      * @param prepareTime 竞标结束时间
-     * @param auctionTime 甄选结束时间
      * @param startTime 开始时间
      * @param cityId 城市ID
      * @param region 活动区域
@@ -269,12 +268,12 @@ public class User implements Serializable {
      * @return 活动ID，失败返回错误码，-1：参数错误，-2：时间设置有误，-3：无资格，-4：一天最多发布10个活动，-5：内部错误
      */
     @Method
-    public int launch(int type, String title, String mockName, String photos, DateTime prepareTime, DateTime auctionTime, DateTime startTime, int cityId, String region, String address, String content, String rules, Boolean needPhoto, String memo, int basicPrice, int donate) {
+    public int launch(int type, String title, String mockName, String photos, DateTime prepareTime, DateTime startTime, int cityId, String region, String address, String content, String rules, Boolean needPhoto, String memo, int basicPrice, int donate) {
         // 参数校验
         if(Activity.TYPE_GIRL != type && Activity.TYPE_BOY != type && Activity.TYPE_FAMOUS != type) {
             return -1;
         }
-        if(Text.isBlank(title) || Text.isBlank(mockName) || Text.isBlank(photos) || null == prepareTime || null == auctionTime || null == startTime || cityId <= 0 || Text.isBlank(region) || Text.isBlank(content) || null == needPhoto || basicPrice < 0 || donate < 0 || donate > 100) {
+        if(Text.isBlank(title) || Text.isBlank(mockName) || Text.isBlank(photos) || null == prepareTime || null == startTime || cityId <= 0 || Text.isBlank(region) || Text.isBlank(content) || null == needPhoto || basicPrice < 0 || donate < 0 || donate > 100) {
             return -1;
         }
         if(null == rules) {
@@ -286,13 +285,13 @@ public class User implements Serializable {
         if(Text.isBlank(address)) {
             address = region;
         }
-        if(prepareTime.compareTo(DateTime.now()) < 10 * 60 * 1000) {
+        if(prepareTime.compareTo(DateTime.now()) < 10 * 60) {
             return -2;
         }
-        if(auctionTime.compareTo(prepareTime) < 0) {
+        if(startTime.compareTo(prepareTime) < 0) {
             return -2;
         }
-        if(startTime.compareTo(auctionTime) < 10 * 60 * 1000) {
+        if(startTime.compareTo(DateTime.now()) > 60 * 60 * 24 * 7) {
             return -2;
         }
         // 检查活动主资格
@@ -307,7 +306,7 @@ public class User implements Serializable {
         }
         // 执行变更
         StringBuilder builder = new StringBuilder();
-        builder.append("INSERT INTO A_Activity (Type, AngelID, MockName, BidID, Title, Photos, PrepareTime, AuctionTime, StartTime, CityID, Region, Address, Content, Rules, NeedPhoto, Memo, BasicPrice, Donate, Status, AddTime, UpdateTime) VALUES (");
+        builder.append("INSERT INTO A_Activity (Type, AngelID, MockName, BidID, Title, Photos, PrepareTime, StartTime, CityID, Region, Address, Content, Rules, NeedPhoto, Memo, BasicPrice, Donate, Status, AddTime, UpdateTime) VALUES (");
         builder.append(type);
         builder.append(", ");
         builder.append(id);
@@ -319,8 +318,6 @@ public class User implements Serializable {
         builder.append(photos);
         builder.append("', '");
         builder.append(prepareTime.toString());
-        builder.append("', '");
-        builder.append(auctionTime.toString());
         builder.append("', '");
         builder.append(startTime.toString());
         builder.append("', ");
@@ -398,6 +395,11 @@ public class User implements Serializable {
         //
         String sql = "UPDATE A_User SET Name = '" + name + "', Career = '" + career + "', Photos = '" + newPhotos + "' WHERE ID = " + id;
         DB.executor().alter(sql);
+        this.name = name;
+        this.career = career;
+        this.photos = newPhotos;
+        //
+        refresh();
     }
 
     /**
@@ -763,6 +765,8 @@ public class User implements Serializable {
         }
         String sql = "UPDATE A_User SET Credit = Credit + (" + score + ") WHERE id = " + id;
         DB.executor().alter(sql);
+        credit += score;
+        refresh();
     }
 
     /**

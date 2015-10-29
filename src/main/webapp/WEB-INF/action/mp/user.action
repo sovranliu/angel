@@ -1,19 +1,5 @@
-#include<mp/authority.action>
+// #include<mp/authority.action>
 
-if(null != context.get("User")) {
-    return null;
-}
-var userId = context.get("userId");
-var user = $("User", "id = " + userId);
-if(null == user) {
-	context.set("reason", "用户信息异常");
-	return "outside.html";
-}
-if(user.p("credit") < 25) {
-	context.set("reason", "阁下的信誉实在是太低了...");
-	return "outside.html";
-}
-context.put("User", user);
-// context.put("userId", 1);
-// context.put("User", $("User", "id = 2"));
+context.put("userId", 1);
+context.put("User", $("User", "id = 1"));
 return null;

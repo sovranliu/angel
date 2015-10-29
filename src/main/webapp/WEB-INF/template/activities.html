@@ -1,0 +1,59 @@
+#if($activities)
+    #foreach($activity in $activities)
+    <a href="activity?id=${activity.id()}" class="amf-list">
+        <h4>${activity.title()}</h4>
+        <div class="img-wrap">
+            <img src="#" class="act-img" data-src="${activity.primaryPhoto()}" alt="">
+        </div>
+        <p>${activity.content()}</p>
+        <div class="amf-info">
+            <div class="amf-block">
+                <p>剩余时间</p>
+                <p>${activity.remainDays()}天</p>
+            </div>
+            <div class="amf-block">
+                <p>活动地点</p>
+                <p>
+                    #if("$!activity.region()" == "")
+                    中标可见
+                    #else
+                    #if(${activity.region().length()} > 5)
+                    ${activity.region().substring(0, 4)}..
+                    #else
+                    ${activity.region()}
+                    #end
+                    #end
+                </p>
+            </div>
+            <div class="amf-block">
+                <p>职业</p>
+                <p>
+                    #if("$!activity.career()" == "")
+                    不告诉你
+                    #else
+                    #if(${activity.career().length()} > 5)
+                    ${activity.career().substring(0, 4)}
+                    #else
+                    ${activity.career()}
+                    #end
+                    #end
+                </p>
+            </div>
+            <div class="amf-block">
+                <div class="circle-progress">
+                    <div class="circle-inner-left">
+                        <div class="circle-left" style="transform: rotate(-225deg);">
+                        </div>
+                    </div>
+                    <div class="circle-inner-right">
+                        <div class="circle-right" style="transform: rotate(315deg);"></div>
+                    </div>
+                        <span class="circle-progress-text">
+                            <label>${activity.popularity()}</label>竞拍
+                        </span>
+                </div>
+            </div>
+        </div>
+    </a>
+    #end
+#end

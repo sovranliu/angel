@@ -18,11 +18,8 @@
 </head>
 <body>
 <header class="amf-header">
-    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <a href="javascript:history.go(-1);" class="back">发起活动</a>
     <span>选择城市</span>
-    <a href="javascript:;" class="mine">
-        <i></i>
-    </a>
 </header>
 <div class="amf-content">
     <div class="search-box gray">
@@ -32,8 +29,9 @@
         <p>城市列表</p>
     </div>
     <ul id="citylist">
-        <li class="row" data-code="110000">北京</li>
-        <li class="row" data-code="210000">上海</li>
+        #foreach($city in $cities)
+            <li class="row" data-code="${city.p("id")}">${city.p("name")}</li>
+        #end
     </ul>
     <p class="morecity">更多城市请直接搜索</p>
 </div>
