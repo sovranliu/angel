@@ -66,7 +66,11 @@ public class Pay {
         else if(fee > 100) {
             fee = PAY_PERCENT;
         }
-        return amount * fee / 100;
+        int result = amount * fee / 100;
+        if(result < 100) {
+            return 0;
+        }
+        return result;
     }
 
     /**
