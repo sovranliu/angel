@@ -58,7 +58,11 @@ if("wechart_authorize_userinfo" == context.parameters.get("state")) {
     if(null == source) {
         source = "";
     }
-	var userId = waiter.c("register", j.nickname, j.sex, j.headimgurl, j.openid, source);
+    var isFans = false;
+    if(true == com.slfuture.angel.wechart.utility.Pay.isFans(j.openid)) {
+        isFans = true;
+    }
+	var userId = waiter.c("register", j.nickname, j.sex, j.headimgurl, j.openid, isFans, source);
 	if(0 == userId) {
         context.set("reason", "竟然注册失败了...");
         return "outside.html";

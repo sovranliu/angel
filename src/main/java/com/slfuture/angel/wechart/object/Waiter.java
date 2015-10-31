@@ -25,12 +25,13 @@ public class Waiter {
      * @param gender 性别
      * @param wechartHead 微信头像URL
      * @param openId 开放ID
+     * @param isFans 是否粉丝
      * @param source 用户来源
      * @return 注册用户ID
      */
     @Method
-    public int register(String nickName, int gender, String wechartHead, String openId, String source) {
-        String sql = "INSERT INTO A_User (NickName, Gender, Credit, Photos, Career, OpenID, Source, AddTime, UpdateTime) VALUES ('" + EmojiFilter.filter(nickName) + "', " + gender + ", "  + Credit.SCORE_MID + ", '" + wechartHead + "', '', '" + openId + "', '" + source + "', NOW(), NOW())";
+    public int register(String nickName, int gender, String wechartHead, String openId, boolean isFans, String source) {
+        String sql = "INSERT INTO A_User (NickName, Gender, Credit, Photos, Career, OpenID, IsFans, Source, AddTime, UpdateTime) VALUES ('" + EmojiFilter.filter(nickName) + "', " + gender + ", "  + Credit.SCORE_MID + ", '" + wechartHead + "', '', '" + openId + "', " + isFans + ", '" + source + "', NOW(), NOW())";
         Long result = DB.executor().insert(sql);
         return (int) (long) result;
     }

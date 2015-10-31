@@ -7,6 +7,7 @@ import com.slfuture.carrie.world.IObject;
 import com.slfuture.carrie.world.World;
 import com.slfuture.carrie.world.relation.Condition;
 import com.slfuture.carrie.world.relation.prepare.PropertyPrepare;
+import com.slfuture.utility.wechart.authorize.UserInfoAccess;
 import com.slfuture.utility.wechart.pay.Payment;
 import com.slfuture.utility.wechart.pay.structure.PayResult;
 import org.apache.log4j.Logger;
@@ -46,6 +47,15 @@ public class Pay {
             pipeLine.start(1, 1000);
         }
         return pipeLine;
+    }
+
+    /**
+     * 判断用户是否关注了公众号
+     *
+     * @return 判断用户是否关注了公众号
+     */
+    public static boolean isFans(String openId) {
+        return UserInfoAccess.isFans(openId);
     }
 
     /**

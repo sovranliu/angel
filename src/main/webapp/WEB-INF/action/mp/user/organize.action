@@ -1,4 +1,5 @@
-#include<mp/user.action>
+#include<mp/fans.action>
+
 var city = context.cookie.get("city");
 if(null == city || "" == city) {
     return "city.url";

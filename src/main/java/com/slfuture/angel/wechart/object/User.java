@@ -48,7 +48,7 @@ public class User implements Serializable {
          */
         @Override
         public Object onMiss(String key) {
-            Record record = DB.executor().load("SELECT ID, Name, NickName, Phone, Gender, Photos, Career, Credit, OpenID, Mail, BlackList FROM A_User WHERE OpenID = '" + key + "'");
+            Record record = DB.executor().load("SELECT ID, Name, NickName, Phone, Gender, Photos, Career, Credit, OpenID, IsFans, Mail, BlackList FROM A_User WHERE OpenID = '" + key + "'");
             if(null == record) {
                 return null;
             }
@@ -80,7 +80,7 @@ public class User implements Serializable {
          */
         @Override
         public Object onMiss(String key) {
-            Record record = DB.executor().load("SELECT ID, Name, NickName, Phone, Gender, Photos, Career, Credit, OpenID, Mail, BlackList FROM A_User WHERE ID = " + key);
+            Record record = DB.executor().load("SELECT ID, Name, NickName, Phone, Gender, Photos, Career, Credit, OpenID, IsFans, Mail, BlackList FROM A_User WHERE ID = " + key);
             if(null == record) {
                 return null;
             }
@@ -165,6 +165,11 @@ public class User implements Serializable {
      */
     @Property
     public String openId;
+    /**
+     * 是否粉丝，0：非粉丝，其他：粉丝
+     */
+    @Property
+    public boolean isFans;
     /**
      * 邮箱
      */
@@ -344,6 +349,20 @@ public class User implements Serializable {
             return -5;
         }
         return (int) ((long) result);
+    }
+
+    /**
+     * 刷新
+     *
+     * @param isFans 是否是粉丝
+     */
+    @Method
+    public void update(boolean isFans) {
+        String sql = "UPDATE A_User SET isFans = " + isFans + " WHERE ID = " + id;
+        DB.executor().alter(sql);
+        this.isFans = isFans;
+        //
+        refresh();
     }
 
     /**
