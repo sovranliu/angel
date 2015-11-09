@@ -312,7 +312,7 @@ public class Bid implements Serializable {
             refund("竞拍者查找失败");
             return -3;
         }
-        int result = DB.executor().alter("UPDATE A_Bid SET Status = " + STATUS_PAY + " WHERE Status IN(" + STATUS_CHOOSE + ", " + STATUS_CONFIRM + ", " + STATUS_CANCEL + ") AND ID = " + id);
+        int result = DB.executor().alter("UPDATE A_Bid SET Status = " + STATUS_PAY + " WHERE Status IN(" + STATUS_CHOOSE + ", " + STATUS_CONFIRM + ", " + STATUS_CANCEL + ") AND ID = " + id + " AND Amount = " + amount);
         if(1 != result) {
             logger.error("Bid.pay(" + id + ", " + activityId + ", " + userId + ", " + amount + ", ?, ?, " + status + ", " + credit + ") failed, result = " + result);
             refund("数据状态不正确");
@@ -410,6 +410,9 @@ public class Bid implements Serializable {
         int result = DB.executor().alter(sql);
         if(1 != result) {
             return -2;
+        }
+        if(0 == amount) {
+            return 0;
         }
         // 调用退款接口
         IObject user = World.relative(this, "user", IObject.class);

@@ -13,6 +13,12 @@ if(3 != bid.p("status") && 4 != bid.p("status")) {
     context.set("activityId", bid.p("activityId"));
     return "activity.url";
 }
+else if(0 == bid.p("amount")) {
+    com.slfuture.angel.wechart.utility.Pay.doPay(bidId);
+    //
+    context.set("activityId", bid.p("activityId"));
+    return "activity.url";
+}
 var conf = com.slfuture.utility.wechart.js.JSHelper.fetchConfig('http://www.angeldinner.com/mp/user/pay?bid=' + bidId);
 context.set("bidId", bidId);
 context.set("amount", (bid.p("amount") / 100));

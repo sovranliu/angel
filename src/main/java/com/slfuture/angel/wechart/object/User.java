@@ -55,6 +55,12 @@ public class User implements Serializable {
             User result = null;
             try {
                 result = record.build(User.class);
+                if(0 == record.getInteger("IsFans")) {
+                    result.isFans = false;
+                }
+                else {
+                    result.isFans = true;
+                }
             }
             catch(Exception ex) { }
             return result;
@@ -87,6 +93,12 @@ public class User implements Serializable {
             User result = null;
             try {
                 result = record.build(User.class);
+                if(0 == record.getInteger("IsFans")) {
+                    result.isFans = false;
+                }
+                else {
+                    result.isFans = true;
+                }
             }
             catch(Exception ex) { }
             return result;
@@ -547,7 +559,7 @@ public class User implements Serializable {
         metaString = metaString.replace("'", "\'");
         //
         String sql = null;
-        if(Message.TYPE_NEWBID == type || Message.TYPE_NEWCHART == type) {
+        if(Message.TYPE_NEWBID == type || Message.TYPE_NEWCHART == type || Message.TYPE_NEWCOMMENT == type) {
             sql = "UPDATE A_Message SET Type = " + type + ", Meta = '" + metaString + "', Status = 1, Delivery = " + delivery + ", UpdateTime = NOW() WHERE Type = " + type + " AND Part = " + meta.get("activityId") + " AND UserID = " + id;
             if(1 == DB.executor().alter(sql)) {
                 OCS.set("UserMessageCount", String.valueOf(id), 0, null);

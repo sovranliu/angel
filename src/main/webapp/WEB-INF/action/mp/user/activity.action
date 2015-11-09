@@ -1,4 +1,4 @@
-#include<mp/user.action>
+#include<mp/fans.action>
 
 context.set("userId", context.get("userId"));
 var activityId = parseInt(context.parameters.get("id"));
@@ -45,4 +45,13 @@ else {
     }
     context.set("bidStatus", bidInfo.status());
 }
+var comment = activity.r("comment");
+var comments = comment.c("hotCommentInfo");
+if(0 == comments.length) {
+    context.set("hasComments", false);
+}
+else {
+    context.set("hasComments", true);
+}
+context.set("comments", comments);
 return "activity.html";

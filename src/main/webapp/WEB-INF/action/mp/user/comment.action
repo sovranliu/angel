@@ -1,0 +1,18 @@
+#include<mp/user.action>
+
+var activityId = context.parameters.get("activity");
+if(null == activityId || "" == activityId) {
+    context.set("msg", "未选择活动");
+    return "error.html";
+}
+activityId = parseInt(activityId);
+var commentId = context.parameters.get("comment");
+if(null == commentId || "" == commentId) {
+    commentId = 0;
+}
+else {
+    commentId = parseInt(commentId);
+}
+context.set("activityId", activityId);
+context.set("commentId", commentId);
+return "comment.html";

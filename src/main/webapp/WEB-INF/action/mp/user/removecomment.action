@@ -1,0 +1,13 @@
+#include<mp/user.action>
+
+var commentId = context.parameters.get("comment");
+if(null == commentId || "" == commentId) {
+    context.set("msg", "未选择评论");
+    return "error.json";
+}
+commentId = parseInt(commentId);
+//
+var comment = $("Comment", null);
+comment.c("remove", context.get("userId"), commentId);
+context.set("code", 0);
+return "success.json";

@@ -84,6 +84,21 @@ public class Pay {
     }
 
     /**
+     * 0元支付
+     *
+     * @param bidId 竞拍ID
+     */
+    public static void doPay(int bidId) {
+        IObject bid = World.get("Bid", bidId, IObject.class);
+        if(null == bid) {
+            logger.error("no bid be found in Pay.doPay(?)\nbidId = " + bidId);
+            return;
+        }
+        Method method = new Method("onPay", new Class<?>[]{int.class});
+        bid.invoke(method, 0);
+    }
+
+    /**
      * 处理通知回调
      *
      * @param data 通知数据
@@ -104,7 +119,7 @@ public class Pay {
         condition.target = payResult.openId;
         IObject bidder = World.get("User", condition, IObject.class);
         if(null == bidder) {
-            logger.error("no bidder be found in Pay.onPay(?)\ndata = " + data);
+            logger.error("no bidder be found in Pay.doPay(?)\ndata = " + data);
             return;
         }
         int bidderId = (Integer) bidder.property("id");
@@ -118,7 +133,7 @@ public class Pay {
         bidCondition.put(true, condition);
         IObject bid = World.get("Bid", bidCondition, IObject.class);
         if(null == bid) {
-            logger.error("no bid be found in Pay.onPay(?)\ndata = " + data);
+            logger.error("no bid be found in Pay.doPay(?)\ndata = " + data);
             return;
         }
         Method method = new Method("onPay", new Class<?>[]{int.class});

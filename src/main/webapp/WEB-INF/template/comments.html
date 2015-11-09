@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>女神的晚餐</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" rev="stylesheet" href="/css/layout.css" type="text/css">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="女神的晚餐">
+    <meta name="keywords" content="女神">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="applicable-device" content="mobile">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+</head>
+<body>
+	<header class="amf-header">
+		<a href="/mp/user/activity?id=${activityId}" class="back">活动详情</a>
+		<span>留言板</span>
+	</header>
+	<div class="amf-content pd-55">
+		<div class="dplist">
+			
+		</div>
+		<div class="morelink" style="display:none"><i></i>加载中</div>
+	</div>
+	<div class="btn-wrap">
+			<a class="dpedit btn" href="/mp/user/comment?activity=${activityId}">我要留言</a>
+		</div>
+	<div class="bg-mast"></div>
+	<script src="/js/jquery2.0.3.js"></script>
+	<script src="/js/base.js"></script>
+		<script>
+		$(function(){
+		    new angel.Index({
+		    	activity:'${activityId}'
+		    });
+		    new angel.LoadMorePage({
+                activity:'${activityId}',
+		    	pagetype:true
+		    })
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+#include<mp/user.action>
+
+var commentId = context.parameters.get("comment");
+if(null == commentId || "" == commentId) {
+    context.set("msg", "未选择评论");
+    return "error.json";
+}
+commentId = parseInt(commentId);
+var content = context.parameters.get("content");
+if(null == content || "" == content) {
+    context.set("msg", "请输入评论内容");
+    return "error.json";
+}
+//
+var comment = $("Comment", null);
+comment.c("response", commentId, content);
+context.set("code", 0);
+return "success.json";

@@ -1,0 +1,19 @@
+#include<mp/user.action>
+
+var activityId = context.parameters.get("activity");
+if(null == activityId || "" == activityId) {
+    context.set("msg", "未选择活动");
+    return "error.json";
+}
+activityId = parseInt(activityId);
+var page = context.parameters.get("page");
+if(null == page || "" == page) {
+    page = 1;
+}
+else {
+    page = parseInt(page);
+}
+//
+var comment = $("Comment", "activityId = " + activityId);
+context.set("comments", comment.c("searchCommentInfo", page));
+return "comments.json";

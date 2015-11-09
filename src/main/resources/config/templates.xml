@@ -50,6 +50,37 @@ ${reason}
 /mp/user/activitybid?activity=${activityId}
 ]]>
     </template>
+    <template id="NOTIFY-3">
+        <![CDATA[
+{
+    "touser":"${openId}",
+    "template_id":"7CV755idTP8Cn00X9ABLdazCHsINA3xHVZb_supuekc",
+    "url":"http://www.angeldinner.com/mp/user/activitybid?activity=${activityId}",
+    "data":{
+        "first":{
+            "value":"您发布的活动有新的竞拍\n",
+            "color":"#000000"
+        },
+        "keyword1":{
+            "value":"${activityTitle}",
+            "color":"#1874CD"
+        },
+        "keyword2":{
+            "value":"刚刚",
+            "color":"#1874CD"
+        },
+        "keyword3":{
+            "value":"自己",
+            "color":"#1874CD"
+        },
+        "remark":{
+            "value":"点击查看活动竞拍情况",
+            "color":"#000000"
+        }
+    }
+}
+]]>
+    </template>
 
     <template id="TITLE-4">
 <![CDATA[
@@ -553,6 +584,38 @@ ${reason}
     <template id="URL-13">
 <![CDATA[
 /mp/user/chart?activity=${activityId}
+]]>
+    </template>
+
+    <template id="TITLE-14">
+<![CDATA[
+活动有新的评论
+]]>
+    </template>
+    <template id="DESCRIPTION-14">
+<![CDATA[
+被评论的活动名称：${activityTitle}
+]]>
+    </template>
+    <template id="URL-14">
+<![CDATA[
+/mp/user/comments?activity=${activityId}
+]]>
+    </template>
+
+    <template id="TITLE-15">
+<![CDATA[
+您的评论有回复
+]]>
+    </template>
+    <template id="DESCRIPTION-15">
+<![CDATA[
+活动名称：${activityTitle}
+]]>
+    </template>
+    <template id="URL-15">
+<![CDATA[
+/mp/user/comments?activity=${activityId}
 ]]>
     </template>
 </templates>

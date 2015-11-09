@@ -27,7 +27,6 @@ public class EmojiFilter {
         return false;
     }
 
-
     private static boolean isEmojiCharacter(char codePoint) {
         return (codePoint == 0x0) ||
                 (codePoint == 0x9) ||

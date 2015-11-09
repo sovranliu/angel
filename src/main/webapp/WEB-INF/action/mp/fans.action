@@ -1,0 +1,14 @@
+#include<mp/user.action>
+
+var user = context.get("User");
+var isFans = user.p("isFans");
+if(true == isFans) {
+    return null;
+}
+isFans = com.slfuture.angel.wechart.utility.Pay.isFans(user.p("openId"));
+if(true == isFans) {
+    user.c("update", true);
+    return null;
+}
+visitor.setCookie("redirect", "http://" + com.slfuture.carrie.utility.config.Configuration.root().visit("/logic/domain").get("") + "/" + context.uri());
+return "subscribe.url";

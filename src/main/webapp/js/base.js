@@ -16,15 +16,18 @@ var angel = {};
         this.getCity = op.getCity;
         this.isPhoto = op.isPhoto;
         this.activity = op.activity;
+        this.comment = op.comment;
         this.bid_id = op.bid_id;
         this.isMsg = op.isMsg;
         this.swipe = op.swipe;
         this.qrcode = op.qrcode;
+        this.needphoto = op.needphoto;
         this.dom = {};
         this.dom.menu = $("#selectMenu");
         this.dom.user = $("#mine");
         this.dom.list = $(".list");
         this.ajaxlock = true;
+        this.qrcodelock = true;
         this.init();
     };
     Angel.Index.prototype = {
@@ -45,29 +48,34 @@ var angel = {};
             $('.msg-dot').hide();
             $('.msgnub').hide();
             if(self.circle) {
-                self.Circle();
                 self.openUserMenu();
             }
             if(self.isCookie) {
                 self.showCity();
-                self.searchCity(forselect);
+                self.searchCity('#forselect');
+                $(window).scroll($.proxy(this.scroll, this));
             };
             if(self.actCookie) {
                 self.historyCity();
-                self.searchCity(citylist);
+                self.searchCity('#citylist');
                 self.actSelectCity();
             };
             if(self.qrcode){
                 $('#btnQucode').click(function (){
-                    self.getQrcode();
+                    if(self.qrcodelock){
+                        self.getQrcode();
+                    }
                 })
             }
+            $('.share').click(function () {
+                if(self.qrcodelock){
+                    self.getActQrcode();
+                }
+            })
             if(self.getCity) {
                 self.getCityName();
                 $('#actdate').date({theme:"datetime"});
                 $('#acttime1').date({theme:"datetime"});
-                $('#acttime2').date({theme:"datetime"});
-                $('#jptime').date({theme:"datetime"});
             }
             if(self.isMsg) {
                 self.getMessage();
@@ -75,6 +83,7 @@ var angel = {};
             }
             if(self.isPhoto) {
                 setInterval(self.checkPhoto,200);
+                $('#jptime').date({theme:"datetime"});
             }
             if(self.isWX) {
                 self.WXconfig();
@@ -108,9 +117,7 @@ var angel = {};
             self.partakeList();
             self.selectMenu();
             self.sortMenu();
-            
             self.aucTab();
-
             $('.actcity').click(function() {
                 window.location.href = '/mp/user/selectcity'
             });
@@ -123,6 +130,39 @@ var angel = {};
             $('.msg-list').click(function() {
                 var _this = $(this);
                 self.msgClick(_this);
+            })
+            //留言板相关
+            $('.js_arr').click(function () {
+                var className = $(this).parent().attr('class');
+                if(className.indexOf('drop-tree') == -1){
+                    $(this).parent().addClass('drop-tree');
+                }else{
+                    $(this).parent().removeClass('drop-tree');
+                }
+            })
+            $('.dpsubmit').click(function(){
+                var con = $('#myarea').val(),
+                    rcon = $.trim(con);
+                if(rcon.length < 15){
+                    $('#pinglun').html('还不满15个字，请继续填写哦~');
+                    return false;
+                }
+                else{
+                    $('#ugcpublish').submit();
+                }
+            })
+            self.deleteDP();
+        },
+        scroll: function() {
+            var scrollTop = $(window).scrollTop();
+            if (scrollTop > 0) {
+                $('#goTop').show();
+            } else {
+                $('#goTop').hide();
+            }
+            $('#goTop').click(function () {
+                $(this).hide();
+                $(window).scrollTop(0);
             })
         },
         // 抽取URL中的参数
@@ -232,6 +272,7 @@ var angel = {};
             图片大小不一致居中补黑色背景
         */
         sliderImg:function() {
+            var self = this;
             var len = $('.swipe-wrap').find('.wrap').length;
             var bullets = $('#position');
             var html = '';
@@ -242,6 +283,7 @@ var angel = {};
             bullets.find('li').eq(0).addClass('on');
             var slider = Swipe(document.getElementById('slider'), {
                 startSlide: 0,  //起始图片切换的索引位置
+                speed:500,
                 continuous: false,  //无限循环的图片切换效果
                 disableScroll: true,  //阻止由于触摸而滚动屏幕
                 stopPropagation: false,  //停止滑动事件
@@ -255,8 +297,11 @@ var angel = {};
                 },  //回调函数，切换时触发
                 transitionEnd: function(index, element) {}  //回调函数，切换结束调用该函数
             });
+            self.imgZoom('.actimg');
+        },
+        imgZoom:function(className){
             var boxWidth = document.body.offsetWidth,
-                img = $('.act-wrap img');
+                img = $(className);
             img.each(function() {
                 var rimg = $(this);
                 $("<img/>").attr("src", $(rimg).attr("src")).load(function() {
@@ -343,7 +388,7 @@ var angel = {};
             }
         },
         searchCity:function(id) {
-            $('#putin').keyup(function() {
+            $('#putin').change(function() {
                 var content = $(this).val();
                 $.ajax({
                     type: "post",
@@ -365,7 +410,7 @@ var angel = {};
         },
         //验证正整数
         regMoney:function() {
-            var reg = /^[1-9]\d*$/;
+            var reg = /^[0-9]\d*$/;
             var value = $('.dmoney').val();
             if(!reg.test(value)) {
                 $('.dmoney').val('');
@@ -382,33 +427,7 @@ var angel = {};
                 return true;
             }
         },
-        Circle:function() {
-            $('.circle-progress').each(function (index, el) {
-                var num = parseFloat($(this).find('.circle-progress-text label').text());
-                if (num <= 50) {
-                    var right = num * 3.6 + 135;
-                    $(this).find('.circle-left').css('-webkit-transform', "rotate(-225deg)");
-                    $(this).find('.circle-left').css('-moz-transform', "rotate(-225)");
-                    $(this).find('.circle-left').css('-ms-transform', "rotate(-225)");
-                    $(this).find('.circle-left').css('transform', "rotate(-225deg)");
-                    $(this).find('.circle-right').css('-webkit-transform', "rotate(" + right + "deg)");
-                    $(this).find('.circle-right').css('-moz-transform', "rotate(" + right + "deg)");
-                    $(this).find('.circle-right').css('-ms-transform', "rotate(" + right + "deg)");
-                    $(this).find('.circle-right').css('transform', "rotate(" + right + "deg)");
-                }
-                else {
-                    var left = num * 3.6 - 45;
-                    $(this).find('.circle-right').css('-webkit-transform', "rotate(-45deg)");
-                    $(this).find('.circle-right').css('-moz-transform', "rotate(-45deg)");
-                    $(this).find('.circle-right').css('-ms-transform', "rotate(-45deg)");
-                    $(this).find('.circle-right').css('transform', "rotate(-45deg)");
-                    $(this).find('.circle-left').css('-webkit-transform', "rotate(" + left + "deg)");
-                    $(this).find('.circle-left').css('-moz-transform', "rotate(" + left + "deg)");
-                    $(this).find('.circle-left').css('-ms-transform', "rotate(" + left + "deg)");
-                    $(this).find('.circle-left').css('transform', "rotate(" + left + "deg)");
-                }
-            });
-        },
+        
         msgClick:function(target) {
             var url = target.data('url'),
                 hasRead = target.data('read'),
@@ -467,12 +486,14 @@ var angel = {};
             var height = $(document).height();
             var dialogWidth= $('#QrcodeLayer').width()/2;
             var dialogHeight= $('#QrcodeLayer').height()/2;
+            self.qrcodelock = false;
             $('.bg-mast').css('height',height+'px');
             $('.bg-mast').show();
             $('#QrcodeLayer').css('margin-left',-dialogWidth+'px');
             $('#QrcodeLayer').css('margin-top',-dialogHeight+'px');
             $('#QrcodeLayer').show();
             $('.cui-top-close').click(function() {
+                self.qrcodelock = true;
                 $('#QrcodeLayer').hide();
                 $('#code').html('');
                 $('.bg-mast').hide();
@@ -482,8 +503,22 @@ var angel = {};
             var self = this;
             var id = parseInt(self.activity);
             var str = 'http://www.angeldinner.com/mp/user/deal?activity=' + id;
+            $('#QrcodeLayer').find('.title').html('请对方扫描二维码');
             $("#code").qrcode({
-                render: "table",
+                render: "canvas",
+                width: 200,
+                height:200,
+                text: str
+            });
+            self.openQrcodeDialog();
+        },
+        getActQrcode:function (){
+            var self = this;
+            var id = parseInt(self.activity);
+            var str = 'http://www.angeldinner.com/mp/user/activity?id=' + id + '&source=act-' + id;
+            $('#QrcodeLayer').find('.title').html('长按保存二维码图片');
+            $("#code").qrcode({
+                render: "canvas",
                 width: 200,
                 height:200,
                 text: str
@@ -496,7 +531,6 @@ var angel = {};
                 b = $('#actname').val(),
                 c = $('#actarea').val(),
                 d = $('#acttime1').val(),
-                e = $('#acttime2').val(),
                 f = $('#actdate').val(),
                 g = $('#actmoney').val(),
                 h = $('#huodong').val(),
@@ -508,14 +542,14 @@ var angel = {};
             if(!self.checkEmpty(a,'城市') ||!self.checkEmpty(b,'活动名称') || !self.checkEmpty(c,'活动区域') || !self.checkEmpty(j,'真实信息') ){
                 return false;
             }
-            if(!self.checkEmpty(d,'竞拍截止时间') ||!self.checkEmpty(e,'遴选截止时间') || !self.checkEmpty(f,'活动截止时间')){
+            if(!self.checkEmpty(d,'竞拍截止时间')|| !self.checkEmpty(f,'活动截止时间') || !self.checkEmpty(g,'活动金额') ){
                 return false;
             }
-            if(!self.checkEmpty(g,'活动金额') ||!self.checkEmpty(h,'活动内容') || !self.checkEmpty(i,'昵称') || !self.checkEmpty(k,'活动图片')){
+            if(!self.checkEmpty(h,'活动内容') || !self.checkEmpty(i,'昵称') || !self.checkEmpty(k,'活动图片')){
                 return false;
             }
             html = '<li><label>活动时间：</label><span id="act-date">'+ f +'</span></li>';
-            html += '<li><label>起拍价：</label><span id="act-money">'+ g +'</span>元</li>';
+            html += '<li style="height:42px;"><label>活动底价：</label><span id="act-money">'+ g +'</span>元<span class="hasmsg">平台将收取最终出价10%的运营费用</span></li>';
             html += '<li><label>慈善比例：</label><span id="act-cishan">'+ cishan +'</span></li>';
             html += '<a id="confirm-submit" class="confirm-btn">确定</a>';
             self.openDialog('信息确认',html);
@@ -534,10 +568,10 @@ var angel = {};
             if(!self.checkEmpty(m,'竞拍价格')){
                 return false;
             }
-            if($('.selectimg').length > 0){
+            if(self.needphoto){
                 if(!self.checkEmpty(k,'活动图片')) {
                     return false;
-               }
+                }
             }
             html += '<li><label>我的出价：</label><span id="act-money">'+ m +'</span> 元</li>';
             html += '<a id="confirm-submit-2" class="confirm-btn">确定</a>';
@@ -562,7 +596,6 @@ var angel = {};
                 b = $('#actname').val(),
                 c = $('#actarea').val(),
                 d = $('#acttime1').val(),
-                e = $('#acttime2').val(),
                 f = $('#actdate').val(),
                 g = $('#actmoney').val(),
                 h = $('#huodong').val(),
@@ -595,7 +628,6 @@ var angel = {};
                     region:c,
                     address:actaddress,
                     preparetime:d,
-                    auctiontime:e,
                     starttime:f,
                     basicprice:g,
                     donate:cishan,
@@ -661,18 +693,26 @@ var angel = {};
         },
         //选择相册中已有的图片
         selectPhotos:function() {
+            var self = this,
+                onephoto = true;
             var arr = [];
             $('.form-item').on('click','.photos',function() {
                 var url = $(this).attr('src'),
                     index = $(this).data('index');
                 var img = '<div class="up-img" data-url="'+ url +'" data-index="'+ index +'"><i class="delete">x</i><img src="' + url + '"></div>';
-                if(-1 == arr.indexOf(index)) {
+                if(-1 == arr.indexOf(index) && onephoto) {
                     arr.push(index);
                     $('.file-button').before(img);
                 }
+                if (self.isPhoto) {
+                    onephoto = false;
+                };
             })
             $('.form-item').on('click','.delete',function() {
                 var index = $(this).parent('.up-img').data('index');
+                if (self.isPhoto) {
+                    onephoto = true;
+                };
                 for(i = 0; i < arr.length; i++) {
                     if(index == arr[i]) {
                         arr.splice(i,1);
@@ -793,7 +833,7 @@ var angel = {};
                     val = $('#giveup-date-input').val();
                     data = {
                         id:self.bid_id,
-                        content:val
+                        reason:val
                     };
                     url = '/mp/user/interruptbid';
                     self.giveUpAjax(url,data);
@@ -836,7 +876,7 @@ var angel = {};
                     val = $('#giveup-date-input').val();
                     data = {
                         id:self.activity,
-                        content:val
+                        reason:val
                     };
                     url = '/mp/user/interruptactivity';
                     self.giveUpAjax(url,data);
@@ -907,6 +947,33 @@ var angel = {};
             else{
                 return true;
             }
+        },
+        deleteDP:function(){
+            $('.dplist').on('click','#del-dp',function() {
+                var div = $(this).parent().parent('.dpitem'),
+                    dpid = div.attr('data-dpid');
+                $.ajax({
+                    type:'get',
+                    url:'/mp/user/dplist',
+                    data:{
+                        dpid:dpid
+                    },
+                    dataType:'json',
+                    success:function(d) {
+                        if(d.code >= 0) {
+                            div.remove();
+                        }
+                        else{
+                            alert(d.msg)
+                        }
+                    }
+                })
+            })
+            $('.dplist').on('click','#replay-dp',function() {
+                var self = this;
+                var dpid = $(this).parent().parent('.dpitem').attr('data-dpid');
+                window.location.href = '/mp/user/comment/?activity='+ self.activity +'&comment='+dpid;
+            })
         }
     };
     Angel.LazyLoadImg = function(opt) {
@@ -1034,12 +1101,18 @@ var angel = {};
         this.morelink = $(".morelink");
         this.ajaxLock = true;
         this.type = opt.type;
+        this.pagetype = opt.pagetype;
+        this.commentpage = 1;
+        this.activity = opt.activity;
         this.init();
     };
     Angel.LoadMorePage.prototype = {
         constructor: Angel.LoadMorePage,
         init: function() {
+            var _this = this;
             $(window).scroll($.proxy(this.scroll, this));
+            _this.Circle();
+            _this.getComments(_this.commentpage);
         },
         scroll: function() {
             var _this = this, 
@@ -1049,14 +1122,17 @@ var angel = {};
                 if (_this.ajaxLock && bodyHeight - scrollTop - wHeight < 40 ) {
                     _this.ajaxLock = false;
                     _this.morelink.show();
-                    _this.loadMoreact();
+                    if(_this.pagetype){
+                        _this.getComments(_this.commentpage);
+                    }else{
+                        _this.loadMoreact();
+                    }
                 }
             },
-
         loadMoreact: function() {
             var _this=this,
             ajax_data = {
-                page: _this.page,
+                page: _this.commentpage,
                 type:_this.type
             };
             $.ajax({
@@ -1079,12 +1155,84 @@ var angel = {};
             });     
         },
         renderAct: function(data,page){
-            console.log(page);
             var _this = this;
             _this.morelink.hide();
             _this.page = page + 1;
             $('.amf-content').append(data);
-        } 
+            _this.Circle();
+        },
+        getComments:function (page) {
+            var _this = this;
+            $.ajax({
+                type:'get',
+                url:'/mp/user/fetchcomments',
+                data:{
+                    page:page,
+                    activity:_this.activity
+                },
+                dataType:'json',
+                success:function(d) {
+                    if(d.code >= 0) {
+                        var data = d.data;
+                        _this.renderComments(data);
+                        _this.commentpage = page + 1;
+                        _this.ajaxLock = true;
+                    }
+                    else{
+                        alert(d.msg);
+                    }
+                }
+            })
+        },
+        renderComments:function (data) {
+            for(var i = 0;i < data.length;i++){
+                var html = '';
+                html += '<div class="dpitem" data-dpid="' + data[i].id +'">';
+                html += '<div class="dpname"><img class="userheart" src="' + data[i].photo + '" alt="">';
+                html += '<span>' + data[i].nickName + '</span>';
+                html += '<div class="date">' + data[i].submitTime + '</div></div>';
+                html += '<div class="dpcontent drop-tree"><p class="dp-hidden line-clamp-4">'+data[i].content+'</p>';
+                html += '<span class="arr js_arr"></span></div>';
+                if(data[i].response != undefined){
+                    html += '<div class="dpreplay dp-hidden">';
+                    html += '<b>活动主回复：</b>' + data[i].response + '</div>';
+                }
+                html += '<div class="dpedit-btn-wrap">';
+                html += '<button id="del-dp" class="light-btn">删除</button>';
+                if(data[i].response != ''){
+                    html += '<button id="replay-dp" class="light-btn">回复</button>';
+                }
+                html += '</div></div>';
+                $('.dplist').append(html);
+            }
+        },
+        Circle:function() {
+            $('.circle-progress').each(function (index, el) {
+                var num = parseFloat($(this).find('.circle-progress-text label').text());
+                if (num <= 50) {
+                    var right = num * 3.6 + 135;
+                    $(this).find('.circle-left').css('-webkit-transform', "rotate(-225deg)");
+                    $(this).find('.circle-left').css('-moz-transform', "rotate(-225)");
+                    $(this).find('.circle-left').css('-ms-transform', "rotate(-225)");
+                    $(this).find('.circle-left').css('transform', "rotate(-225deg)");
+                    $(this).find('.circle-right').css('-webkit-transform', "rotate(" + right + "deg)");
+                    $(this).find('.circle-right').css('-moz-transform', "rotate(" + right + "deg)");
+                    $(this).find('.circle-right').css('-ms-transform', "rotate(" + right + "deg)");
+                    $(this).find('.circle-right').css('transform', "rotate(" + right + "deg)");
+                }
+                else {
+                    var left = num * 3.6 - 45;
+                    $(this).find('.circle-right').css('-webkit-transform', "rotate(-45deg)");
+                    $(this).find('.circle-right').css('-moz-transform', "rotate(-45deg)");
+                    $(this).find('.circle-right').css('-ms-transform', "rotate(-45deg)");
+                    $(this).find('.circle-right').css('transform', "rotate(-45deg)");
+                    $(this).find('.circle-left').css('-webkit-transform', "rotate(" + left + "deg)");
+                    $(this).find('.circle-left').css('-moz-transform', "rotate(" + left + "deg)");
+                    $(this).find('.circle-left').css('-ms-transform', "rotate(" + left + "deg)");
+                    $(this).find('.circle-left').css('transform', "rotate(" + left + "deg)");
+                }
+            });
+        },
     };
     Angel.Chart = function(op) { 
         this.activity = $('#chat-messages').data('activity');

@@ -97,6 +97,8 @@ public class Message {
     public final static int TYPE_ACTIVITYBREAK = 11;
     public final static int TYPE_BIDDEAL = 12;
     public final static int TYPE_NEWCHART = 13;
+    public final static int TYPE_NEWCOMMENT = 14;
+    public final static int TYPE_NEWRESPONSE = 15;
     /**
      * 消息元数据
      */

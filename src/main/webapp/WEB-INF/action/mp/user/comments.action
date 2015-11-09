@@ -1,0 +1,17 @@
+#include<mp/user.action>
+
+var activityId = context.parameters.get("activity");
+if(null == activityId || "" == activityId) {
+    context.set("msg", "未选择活动");
+    return "error.html";
+}
+activityId = parseInt(activityId);
+var activity = $("ActivityDetail", "id = " + activityId);
+if(activity.p("angelId") == context.get("userId")) {
+    context.set("isAngel", true);
+}
+else {
+    context.set("isAngel", false);
+}
+context.set("activityId", activityId);
+return "comments.html";

@@ -18,6 +18,12 @@ if(null != context.cookie.get("openid")) {
     context.set("reason", "用户信息真的很异常...");
     return "outside.html";
 }
+else {
+    var source = context.parameters.get("source");
+    if(null != source) {
+        visitor.setCookie("source", source);
+    }
+}
 if("wechart_authorize_userinfo" == context.parameters.get("state")) {
     if(null == context.parameters.get("code")) {
         context.set("reason", "额...竟然被拒绝授权了...");
@@ -45,7 +51,7 @@ if("wechart_authorize_userinfo" == context.parameters.get("state")) {
         context.set("reason", "企鹅君返回了且奇怪的资料...");
         return "outside.html";
     }
-    var user = $("User", "OpenID = '" + j.openid + "'");
+    var user = $("User", "openId = '" + j.openid + "'");
     if(null != user) {
         context.put("userId", user.p("id"));
         context.put("User", user);
@@ -57,6 +63,9 @@ if("wechart_authorize_userinfo" == context.parameters.get("state")) {
     var source = context.cookie.get("source");
     if(null == source) {
         source = "";
+    }
+    else {
+        visitor.setCookie("source", null);
     }
     var isFans = false;
     if(true == com.slfuture.angel.wechart.utility.Pay.isFans(j.openid)) {

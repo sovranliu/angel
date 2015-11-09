@@ -1,0 +1,38 @@
+{
+#if(${code})
+"code":${code}
+#else
+"code":0
+#end
+#if(${msg})
+,"msg":"${msg}"
+#end
+,"data":[
+#foreach($comment in $comments)
+#if($velocityCount > 1)
+,
+#end
+{
+"id":"${comment.id()}"
+,"nickName":"${comment.nickName()}"
+#if("$!comment.photo()" == "")
+#else
+,"photo":"${comment.photo()}"
+#end
+,"content":"${comment.content()}"
+#if("$!comment.response()" == "")
+#else
+,"response":"${comment.response()}"
+#end
+,"submitTime":"${comment.submitTime()}"
+#if("$!comment.response()" == "")
+#else
+,"responseTime":"${comment.responseTime()}"
+#end
+}
+#end
+]
+#if(${redirect})
+,"redirect":"${redirect}"
+#end
+}

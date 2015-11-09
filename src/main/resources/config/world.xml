@@ -67,6 +67,13 @@
                 </catch>
             </catcher>
         </User>
+        <Comment class="com.slfuture.angel.wechart.object.Comment">
+            <relations>
+                <relation name="activity" target="ActivityDetail" mode="0-1">
+                    <condition category="link" type="EQUAL" self-field="activityId" other-field="id" />
+                </relation>
+            </relations>
+        </Comment>
         <ActivityInfo primarykey="ID" class="com.slfuture.angel.wechart.object.ActivityInfo">
             <relations>
                 <relation name="city" target="City" mode="0-1">
@@ -94,6 +101,9 @@
                 <relation name="deal" target="Bid" mode="0-1">
                     <condition category="prerequisite" type="NOTEQUAL" self-field="bidId" value="(int)0" />
                     <condition link="and" category="link" type="EQUAL" self-field="bidId" other-field="id" />
+                </relation>
+                <relation name="comment" target="Comment" mode="0-1">
+                    <condition link="and" category="link" type="EQUAL" self-field="id" other-field="activityId" />
                 </relation>
 			</relations>
             <catcher>
